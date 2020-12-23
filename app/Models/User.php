@@ -27,7 +27,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'street',
+        'number',
+        'residential',
+        'post_code',
+        'profile_photo_path',
+        'qr_client',
     ];
+
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -58,4 +66,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 }

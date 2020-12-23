@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ControlPedido extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'pedido_id',
+        'status',
+
+    ];
 }
