@@ -22,6 +22,17 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the response bindings.
+     *
+     * @return void
+     */
+    protected function registerResponseBindings()
+    {
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
+    }
+
+    /**
      * Bootstrap any application services.
      *
      * @return void

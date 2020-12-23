@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PedidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function ()
+{
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function ()
+{
     return view('dashboard');
 })->name('dashboard');
+
+//route for redirects multiauth procesing
+Route::get('redirects', ['App\Http\Controllers\HomeController', 'index']);
+
+Route::resource('pedidos', 'App\Http\Controllers\PedidoController');

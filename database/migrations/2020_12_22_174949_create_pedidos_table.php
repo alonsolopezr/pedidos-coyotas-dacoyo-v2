@@ -25,6 +25,8 @@ class CreatePedidosTable extends Migration
             $table->date('fecha');
             $table->time('hora'); //entre 10:30am y 4:00pm
             $table->boolean('cancelado')->default(false);
+            //TODO: cambiar al clientes, ahorita por mientras users id
+            $table->foreignId('cliente_id')->on('users');
             $table->timestamps();
         });
     }

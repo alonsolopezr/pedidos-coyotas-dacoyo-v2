@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pedido;
+use App\Models\Producto;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PedidoController extends Controller
 {
@@ -14,7 +16,10 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        //muestra todos los pedidos
+        $pedidos = Pedido::all();
+        dd($pedidos);
+        return view('pedidos.index', compact('pedidos'));
     }
 
     /**
@@ -24,7 +29,10 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        //
+        //nuevo pedido por cliente
+
+        $productos = Producto::all();
+        return view('pedidos.create', compact('productos'));
     }
 
     /**
@@ -35,7 +43,24 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //almacena pedido
+
+        //validar pedido
+        $validated = $this->validate($request, [
+            "campo" => 'required'
+
+        ]);
+        //almacenar pedido
+        $pedido = Pedido::create($validated);
+        //almacenar productos de pedido
+        foreach ($request->productos as $key => $value)
+        {
+            # code...
+
+        }
+
+        //redirect
+        return redirect()->route('pedidos.confirmacion', compact('pedido'));
     }
 
     /**
@@ -46,7 +71,8 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido)
     {
-        //
+        //muestra detalle de pedido
+        return view('pedidos.show', $pedido);
     }
 
     /**
@@ -57,7 +83,7 @@ class PedidoController extends Controller
      */
     public function edit(Pedido $pedido)
     {
-        //
+        //modifica pedido?? se necesita??
     }
 
     /**
@@ -69,7 +95,7 @@ class PedidoController extends Controller
      */
     public function update(Request $request, Pedido $pedido)
     {
-        //
+        //almacena modif
     }
 
     /**
@@ -80,6 +106,6 @@ class PedidoController extends Controller
      */
     public function destroy(Pedido $pedido)
     {
-        //
+        //borra pedido... necesario????
     }
 }
