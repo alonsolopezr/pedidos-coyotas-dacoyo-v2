@@ -27,4 +27,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function ()
 //route for redirects multiauth procesing
 Route::get('redirects', ['App\Http\Controllers\HomeController', 'index']);
 
-Route::resource('pedidos', 'App\Http\Controllers\PedidoController');
+Route::resource('pedidos', 'App\Http\Controllers\PedidoController')->middleware(['auth:sanctum']);
