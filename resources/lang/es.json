@@ -1,0 +1,33 @@
+{
+    "Usuarios y Auth": "separador",
+    "Name": "Nombre",
+    "Lastname": "Apellido",
+    "Celular": "Celular",
+    "Email": "Correo Electrónico",
+    "Password": "Contraseña",
+    "Street": "Calle",
+    "House Number": "Número de Casa",
+    "Residential": "Colonia",
+    "Postal Code": "Código Postal",
+
+    "Already registered?": "¿Ya estás registrado?",
+    "Forgot your password?": "¿Se te olvidó tu contraseña?",
+
+    "Remember me": "Recuérdame",
+    "Register": "Registrarse",
+    "Login": "Ingresar",
+    "Manage Account": "Administra tu Perfil",
+    "Profile": "Perfil",
+    "Logout": "Cerrar Sesión",
+
+    "Dashboard ": "Centro de Control",
+    "Pedidos ": "separador",
+    "New Order": "Nuevo Pedido",
+    "Order": "Pedido",
+    "Orders": "Pedidos",
+    "Your Orders": "Tus Pedidos",
+
+
+
+    "lastone": "último"
+}

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Producto;
+use Illuminate\Support\Facades\Http;
 
 class PedidoCarrito extends Component
 {
@@ -117,5 +118,6 @@ class PedidoCarrito extends Component
     public function registrarPedido()
     {
         //hacer el store
+        Http::post('ruta_api_guardar');
     }
 }
