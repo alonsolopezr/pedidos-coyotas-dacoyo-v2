@@ -18,6 +18,7 @@ class Pedido extends Model
         'fecha',
         'hora',
         'cancelado',
+        'cliente_id',
 
     ];
 

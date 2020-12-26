@@ -2,7 +2,7 @@
     <div class=" flex flex-wrap mx-2 justify-center">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-coyos-lightbrown overflow-hidden shadow-xl sm:rounded-lg">
                     <form action="{{route('pedidos.store')}}" method="POST">
                         @csrf
                     <!-- This is an example component -->
@@ -26,9 +26,9 @@
                                             src="{{asset('storage/'.$producto->imagen_1)}}"
                                             class="h-24 w-24 rounded  mx-auto" />
                                     </div>
-                                    <div class="flex max-w-full  col-span-2 sm:col-span-4 xl:col-span-4">
+                                    <div class="flex max-w-full  col-span-2 md:col-span-4 xl:col-span-4">
                                         <h3 class="w-80 overflow-x-auto pr-5 font-semibold text-black">{{$producto->nombre}}</h3>
-                                        <p class="overflow-x-auto ">
+                                        <p class="overflow-x-auto sm:hidden md:contents">
                                         {{$producto->descripcion}}
                                         </p>
                                     </div>
@@ -40,8 +40,7 @@
                                 </div>
                             @endforeach
                             </div>
-                            <hr>
-                            <button class="bg-red-600 p-3 m-2 rounded text-bold" type="submit">Ordenar</button>
+
                         </div>
                     </form>
                 </div>
@@ -71,12 +70,12 @@
                                 {{-- <script>document.getElementById('contenedorCarrito').innerHTML='';</script> --}}
                                 <div name="contenedorCarrito" id="contenedorCarrito">
                                     @foreach ($pedido as $index=>$articulo)
-                                        <div class="p-2 flex bg-white hover:bg-gray-100 cursor-pointer border-b border-gray-100" style="">
+                                        <div class="p-2 flex bg-coyos-lightbrown hover:bg-coyos-midbrown cursor-pointer border-b border-gray-100" style="">
                                         <div class="p-2 w-12"><img src="{{asset('storage/'.$articulo['imagen_1'])}}" alt="img product"></div>
                                         <div class="flex-auto text-sm w-32">
                                             <div class="font-bold">{{$articulo['nombre']}}</div>
                                             <div class="truncate">{{$articulo['descripcion']}}</div>
-                                            <div class="text-gray-400">Cant: {{$articulo['cantidad']}}</div>
+                                            <div class="text-coyos-darkblue">Cant: {{$articulo['cantidad']}} <b class="text-coyos-lightpink text-bold"> = </b> ${!!($articulo['cantidad']*$articulo['precio'])!!}</div>
                                         </div>
                                         <div class="flex flex-col w-18 font-medium items-end">
                                             <div class="w-4 h-4 mb-6 hover:bg-red-200 rounded-full cursor-pointer text-red-700" wire:click="quitarDelCarrito({{$index}})">
@@ -95,12 +94,12 @@
                             @endif
 
                             <div class="p-4 justify-center flex">
-                                <button class="text-base  undefined  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer
-                hover:bg-teal-700 hover:text-teal-100
-                bg-teal-100
-                text-teal-700
+                                <button wire:click="registrarPedido()" class="text-base  undefined  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer
+                hover:bg-coyos-darkpink hover:text-coyos-lightblue
+                bg-coyos-lightblue
+                text-coyos-lightpink
                 border duration-200 ease-in-out
-                border-teal-600 transition">Registrar Pedido ${{$this->montoTotal}}</button>
+                border-coyos-darkblue transition">Registrar Pedido ${{$this->montoTotal}}</button>
                             </div>
                         </div>
                     </div>

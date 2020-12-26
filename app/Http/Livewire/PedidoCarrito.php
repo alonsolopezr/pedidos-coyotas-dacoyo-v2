@@ -2,8 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use Carbon\Carbon;
+use App\Models\Pedido;
 use Livewire\Component;
 use App\Models\Producto;
+use App\Models\ProductosDePedido;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class PedidoCarrito extends Component
@@ -117,7 +122,41 @@ class PedidoCarrito extends Component
 
     public function registrarPedido()
     {
+
         //hacer el store
-        Http::post('ruta_api_guardar');
+        // Http::post('ruta_api_guardar');
+
+        DB::transaction(function ()
+        {
+            //guardar pedido
+            $pedido = Pedido::create(
+                [
+                    "folio" => "000011",
+                    "qr" => "000011",
+                    "status" => 1,
+                    "paga_en_tienda" => 1,
+                    "monto_total" => $this->montoTotal,
+                    "fecha" => Carbon::now(),
+                    "hora" => Carbon::now(),
+                    "cancelado" => 0,
+                    "cliente_id" => Auth::user()->id,
+                ]
+            );
+
+            //guardar productos de pedido
+            foreach ($this->pedido as $key => $articulo)
+            {
+                ProductosDePedido::create([
+                    "pedido_id" => $pedido->id,
+                    "producto_id" => $articulo['id'],
+                    "cantidad" => $articulo['cantidad'],
+                ]);
+            }
+            //crer qr
+            //notificar al admin
+            //notificar al cliente
+        });
+
+        return redirect()->route('pedidos.index')->with('success', 'Pedido Regitrado');
     }
 }
