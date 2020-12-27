@@ -180,6 +180,6 @@ class PedidoCarrito extends Component
             //notificar al cliente
         });
 
-        return redirect()->route('pedidos.index');
+        return redirect()->route('pedidos.confirmacion_cliente');
     }
 }

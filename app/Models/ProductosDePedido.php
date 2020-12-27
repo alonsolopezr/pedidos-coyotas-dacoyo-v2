@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Producto;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductosDePedido extends Model
 {
@@ -17,4 +18,13 @@ class ProductosDePedido extends Model
         'comentario',
 
     ];
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
+    public function pedido()
+    {
+        return $this->belongsTo(Pedido::class);
+    }
 }

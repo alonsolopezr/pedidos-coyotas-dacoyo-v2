@@ -28,3 +28,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function ()
 Route::get('redirects', ['App\Http\Controllers\HomeController', 'index']);
 
 Route::resource('pedidos', 'App\Http\Controllers\PedidoController')->middleware(['auth:sanctum']);
+Route::get('pedidos_confirmacion_cliente', function ()
+{
+    return view('pedidos.confirmacion_cliente');
+})->middleware(['auth:sanctum'])->name('pedidos.confirmacion_cliente');
