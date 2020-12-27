@@ -8,14 +8,42 @@
                     <!-- This is an example component -->
                         <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-64">
                             <div class="flex flex-wrap text-center justify-center">
-                                <div class="w-full lg:w-6/12 px-4">
+                                <div class="w-full lg:w-6/12 px-6">
                                     <h2 class="text-4xl font-semibold text-black">Seleccione sus productos</h2>
-                                    <p class="text-lg leading-relaxed mt-4 mb-4 text-gray-500">
+                                    <p class="text-lg leading-relaxed mt-4 mb-4 text-gray-900">
                                         Seleccione los paquetes de Coyotas, de nuestras delicias rellenas de piloncillo, jamoncillo y jamoncillo con nuez.
                                     </p>
                                 </div>
                             </div>
 
+                            <hr>
+                            <div class="row flex justify-center my-2">
+                                <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
+                                    <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted pasa por su pedido el día:</h3>
+
+                                    <input wire:model.debounce="fecha" min="{{$fecha}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
+                                    <h4 class="overflow-x-auto pr-5 font-semibold text-black">a las</h4>
+                                    <select  name="hora" id="hora"  wire:model="hora"   class="rounded bg-coyos-lightblue mr-3">
+                                        {{-- <option value="13:45">2:00pm</option> --}}
+                                        @php
+                                            $this->horaEntregas=Carbon\Carbon::parse($this->apartirHora);
+                                        @endphp
+                                        @for($i=0;$i<=30; $i++)
+                                            @php
+                                                $hora=$this->horaEntregas->addMinutes(5);
+                                                $hora=$hora->format('H:i');
+                                            @endphp
+                                            <option value="{{$hora}}">{{$hora}}</option>
+                                        @endfor
+                                    </select>
+                                    {{-- sucursal --}}
+                                    <h4 class="overflow-x-auto pr-5 font-semibold text-black"> en Sucursal: </h4>
+                                    <select name="sucursal" id="sucursal" wire:model="sucursal" class="rounded bg-coyos-lightblue mr-3">
+                                        <option value="VILLA_DE_SERIS" selected>Villa de Seris</option>
+                                        <option value="OLIVARES">Olivares</option>
+                                    </select>
+                                </div>
+                            </div>
                             <hr>
                             <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
                             @foreach ($productos as $producto)

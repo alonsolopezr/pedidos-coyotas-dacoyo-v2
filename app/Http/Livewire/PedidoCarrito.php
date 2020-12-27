@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use App\Models\Pedido;
 use Livewire\Component;
 use App\Models\Producto;
@@ -18,6 +18,17 @@ class PedidoCarrito extends Component
     public $pedido;
     public $cuantosArticulos;
     public $montoTotal;
+    public $fecha;
+    public $hora;
+    public $contadorPedidosPorDia;
+    //sobre horas y dia entregas
+    public $horaEntregas;
+    public $apartirHora = '13:55';
+    public $lapsoDeMin = '5';
+    public $mesesMaxParaApartar = 2;
+    //sucursal
+    public $sucursal = 'VILLA_DE_SERIS';
+
 
     public function render()
     {
@@ -26,7 +37,18 @@ class PedidoCarrito extends Component
         //actualizar carrito
         $this->contarArticulos();
         $this->calculaMontoTotal();
+        //se determina el dia siguiente para el selector de fecha
+        $this->diaSiguiente();
+
         return view('livewire.pedido-carrito');
+    }
+
+    public function diaSiguiente()
+    {
+        //HACK: se asigna el valor UTC -7 hermosillo, para que dé la hora correcta
+        if ($this->fecha == null)
+            $this->fecha =  Carbon::now('-7:00')->addDay()->locale('es_MX')->format('Y-m-d');
+        //  dd($this->fecha, Carbon::now('-7:00')->locale('es_MX')->format('H:i:s'));
     }
 
     public function contarArticulos()
@@ -47,6 +69,7 @@ class PedidoCarrito extends Component
         //parsear prodId
         $prodId = str_replace("coyo", "", $prodId);
         $prod = $this->obtenerProductoDeArray($prodId);
+
         //dd($this->pedido, $prodId, $cantidad, $prod->precio);
         //si ya está en el carrito, actualiza cantidad
         if ($this->siExisteActualiza($prodId, $cantidad) == null)
@@ -136,8 +159,8 @@ class PedidoCarrito extends Component
                     "status" => 1,
                     "paga_en_tienda" => 1,
                     "monto_total" => $this->montoTotal,
-                    "fecha" => Carbon::now(),
-                    "hora" => Carbon::now(),
+                    "fecha" => $this->fecha,
+                    "hora" => $this->hora,
                     "cancelado" => 0,
                     "cliente_id" => Auth::user()->id,
                 ]
@@ -157,6 +180,6 @@ class PedidoCarrito extends Component
             //notificar al cliente
         });
 
-        return redirect()->route('pedidos.index')->with('success', 'Pedido Regitrado');
+        return redirect()->route('pedidos.index');
     }
 }
