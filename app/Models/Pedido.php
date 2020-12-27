@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\User;
+
 use App\Models\Producto;
 use App\Models\ProductosDePedido;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +39,13 @@ class Pedido extends Model
     public function cliente()
     {
         return $this->belongsTo(User::class, 'cliente_id');
+    }
+
+    public static  function numSiguientePedido($fecha)
+    {
+        $contadorPorDia = count(Pedido::where('fecha', '=', $fecha)->latest()->get());
+        $contadorCampo = Pedido::where('fecha', '=', $fecha)->count() == 0 ? '0' : Pedido::where('fecha', '=', $fecha)->latest()->first()->num_del_dia;
+        //dd('debug pedidos', $contadorPorDia, $contadorCampo);
+        return $contadorCampo + 1;
     }
 }

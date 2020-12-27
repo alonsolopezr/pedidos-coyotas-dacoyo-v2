@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Producto;
 use Illuminate\Support\Carbon;
 use App\Models\ProductosDePedido;
+use LaravelQRCode\Facades\QRCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -156,7 +157,7 @@ class PedidoCarrito extends Component
             //guardar pedido
             $pedido = Pedido::create(
                 [
-                    "folio" => "000011",
+                    "folio" => Pedido::numSiguientePedido($this->fecha),
                     "qr" => "000011",
                     "status" => 1,
                     "paga_en_tienda" => 1,
@@ -178,6 +179,10 @@ class PedidoCarrito extends Component
                 ]);
             }
             //crer qr
+            $qr = QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setOutFile(public_path('storage/images/qrpedidos/qr_pedido.png'))->svg();
+            //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
+            //      ->setMargin(2)
+            //     ->svg();
             //notificar al admin
             //notificar al cliente
             Mail::to(auth()->user()->email)->send(new ConfirmacionPedidoClienteEmail());

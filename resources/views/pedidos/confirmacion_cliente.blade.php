@@ -19,7 +19,9 @@
                                         <p class="text-lg mt-4 mb-4 text-gray-900">
                                             Su Pedido ha sido registrado. Al pasar por el muestre este Código QR:
                                         </p>
-                                        <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="{!! QrCode::size(100)->generate(auth()->user()->pedidos()->latest()->first()->id) !!}" alt="">
+                                        {{-- <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="{!! QRCode::size(100)->generate(auth()->user()->pedidos()->latest()->first()->id) !!}" alt=""> --}}
+                                        {!! QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setOutFile(public_path('storage/images/qrpedidos/qr_pedido.svg'))->svg()!!}
+                                        <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="storage/images/qrpedidos/qr_pedido.svg" alt="">
                                     </div>
                                 </div>
 

@@ -23,7 +23,8 @@
                                         <p class="text-lg mt-4 mb-4 text-gray-900">
                                             Su Pedido ha sido registrado. Al pasar por el muestre este Código QR:
                                         </p>
-                                        <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="{!!$message->embedData(QrCode::format('png')->generate(auth()->user()->pedidos()->latest()->first()->id), 'QrCode.png', 'image/png')!!}">
+                                        {{-- <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="{!!$message->embedData(QRCode::format('svg')->generate(auth()->user()->pedidos()->latest()->first()->id), 'QrCode.png', 'storage/image/qrpedidos')!!}"> --}}
+                                        <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="storage/images/qrpedidos/qr_pedido.svg" alt="">
 
 
                                     </div>

@@ -28,6 +28,7 @@ class CreatePedidosTable extends Migration
             //TODO: cambiar al clientes, ahorita por mientras users id
             $table->foreignId('cliente_id')->on('users');
             $table->enum('sucursal', ['VILLA_DE_SERIS', 'OLIVARES'])->default('VILLA_DE_SERIS');
+            $table->integer('num_del_dia')->default(1);
             $table->timestamps();
         });
     }
