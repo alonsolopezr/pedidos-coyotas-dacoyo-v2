@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire;
 
-use Illuminate\Support\Carbon;
 use App\Models\Pedido;
 use Livewire\Component;
 use App\Models\Producto;
+use Illuminate\Support\Carbon;
 use App\Models\ProductosDePedido;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmacionPedidoClienteEmail;
 
 class PedidoCarrito extends Component
 {
@@ -178,6 +180,7 @@ class PedidoCarrito extends Component
             //crer qr
             //notificar al admin
             //notificar al cliente
+            Mail::to(auth()->user()->email)->send(new ConfirmacionPedidoClienteEmail());
         });
 
         return redirect()->route('pedidos.confirmacion_cliente');
