@@ -72,21 +72,36 @@ class PedidoCarrito extends Component
 
     public function quedanPaquetesDisponiblesParaFecha($fecha)
     {
-        return $this->paquetesDisponiblesParaFecha($fecha) < 50 ? true : false;
+        return $this->paquetesDisponiblesParaFecha($fecha) > 0 ? true : false;
     }
 
     public function paquetesDisponiblesParaFecha($fecha)
     {
-        $pedidos = Pedido::where('fecha', '=', $fecha)->get()->count();
+        $pedidos = Pedido::where('fecha', '=', $fecha)->get();
         $numPaquetes = 0;
-        foreach ($pedidos as $key => $pedido)
-        {
-            # sacar los paquetes pedidos para ese día
-            $numPaquetes += $pedido->productosDePedido()->cantidad;
-        }
-        return $numPaquetes;
+        if ($pedidos != null && count($pedidos) > 0)
+            foreach ($pedidos as $key => $pedido)
+            {
+                # sacar los paquetes pedidos para ese día
+                $numPaquetes += $pedido->paquetes_de_coyotas;
+            }
+        // dd($pedidos, 50 - $numPaquetes);
+        return 50 - $numPaquetes <= 0 ? 0 : 50 - $numPaquetes;
     }
 
+    public function paquetesDisponiblesParaEstePedido($fecha)
+    {
+        $pedidos = Pedido::where('fecha', '=', $fecha)->get();
+        $numPaquetes = 0;
+        dd($pedidos);
+        if ($pedidos != null && count($pedidos) > 0)
+            foreach ($pedidos as $key => $pedido)
+            {
+                # sacar los paquetes pedidos para ese día
+                $numPaquetes += $pedido->productosDePedido()->cantidad;
+            }
+        return 50 - $numPaquetes;
+    }
 
     public function agregarACarrito($prodId, $cantidad)
     {
@@ -111,6 +126,7 @@ class PedidoCarrito extends Component
             ];
         }
         $this->calculaMontoTotal();
+        $this->calculaTotalDePaquetes();
         //dd($this->pedido, $prodId, $cantidad, $prod);
     }
 
@@ -217,6 +233,16 @@ class PedidoCarrito extends Component
         //hacer el store
         // Http::post('ruta_api_guardar');
 
+        //validar
+        $this->validate([
+            "fecha" => "required",
+            "hora" => "required",
+        ], [
+            "fecha.required" => "* Debe seleccionar una fecha válida",
+            "hora.required" => "* Por favor, seleccione una hora disponible, a partir de las 2pm.",
+        ]);
+
+        //se calcula el total de paquetes
         $this->calculaTotalDePaquetes();
         //calcular cuantos paquetes puede apartar y si los sobrepasa,
         //ERROR, devolver  e indicarle que no debe pasar de X paquetes...
@@ -224,11 +250,12 @@ class PedidoCarrito extends Component
         DB::transaction(function ()
         {
             $numDelDia = $this->numSiguientePedido($this->fecha);
+            $stringQr = Carbon::create($this->fecha)->format('Ymd') . '*' . Carbon::create($this->hora)->format('Hi') . '*' . $this->sucursal . '*' . $numDelDia;
             //dd($numDelDia);
             //guardar pedido
             $pedido = Pedido::create(
                 [
-                    "folio" => $numDelDia,
+                    "folio" => $stringQr,
                     "qr" => "000011",
                     "status" => 1,
                     "paga_en_tienda" => 1,
@@ -237,6 +264,7 @@ class PedidoCarrito extends Component
                     "hora" => $this->hora,
                     "cancelado" => 0,
                     "cliente_id" => Auth::user()->id,
+                    "sucursal" => $this->sucursal,
                     "num_del_dia" => $numDelDia,
                     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
                 ]
@@ -252,7 +280,7 @@ class PedidoCarrito extends Component
                 ]);
             }
             //crer qr
-            $qr = QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setOutFile(public_path('storage/images/qrpedidos/qr_pedido.png'))->svg();
+            $qr = QRCode::text($stringQr)->setOutFile(public_path('storage/images/qrpedidos/qr_pedido' . $pedido->id . '.svg'))->setSize(6)->svg();
             //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
             //      ->setMargin(2)
             //     ->svg();

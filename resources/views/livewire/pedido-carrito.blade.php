@@ -13,6 +13,7 @@
                                     <p class="text-lg leading-relaxed mt-4 mb-4 text-gray-900">
                                         Seleccione los paquetes de Coyotas, de nuestras delicias rellenas de piloncillo, jamoncillo y jamoncillo con nuez.
                                     </p>
+                                    <p> Quedan <b>{!!$this->paquetesDisponiblesParaFecha($fecha)!!}</b> paquetes disponibles para este día.</p>
                                 </div>
                             </div>
 
@@ -21,26 +22,16 @@
                                 <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
                                     <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted pasa por su pedido el día:</h3>
 
-                                    <input wire:model.debounce="fecha" min="{{$fecha}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
+                                    <input wire:model.debounce="fecha" min="{{Carbon\Carbon::tomorrow()->format('Y-m-d')}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
+
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black">a las</h4>
                                     <select  name="hora" id="hora" wire.change="cargarHorasDisponiblesDelDia(document.getElementById('hora'))"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
-                                        {{-- <option value="13:45">2:00pm</option> --}}
-                                        {{-- @php
-                                            $this->horaEntregas=Carbon\Carbon::parse($this->apartirHora);
-                                        @endphp
-                                        @for($i=0;$i<=50; $i++)
-                                            @php
-                                                $hora=$this->horaEntregas->addMinutes(5);
-                                                $hora=$hora->format('H:i');
-                                                //validamos si la hora está apartada
-
-                                            @endphp
-                                            <option value="{{$hora}}">{{$hora}}</option>
-                                        @endfor --}}
+                                        <option>Elija</option>
                                         @foreach($this->horasDisponiblesDelDia as $hora)
-                                            <option value="{{$hora}}" >{{$hora}}</option>
+                                            <option  value="{{$hora}}" >{{$hora}}</option>
                                         @endforeach
                                     </select>
+
                                     {{-- sucursal --}}
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black"> en Sucursal: </h4>
                                     <select name="sucursal" id="sucursal" wire:model="sucursal" class="rounded bg-coyos-lightblue mr-3">
@@ -50,28 +41,44 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
-                            @foreach ($productos as $producto)
-                                <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
-                                    <div class="col-span-2 sm:col-span-1 xl:col-span-1">
-                                        <img
-                                            alt="{{$producto->nombre}}"
-                                            src="{{asset('storage/'.$producto->imagen_1)}}"
-                                            class="h-24 w-24 rounded  mx-auto" />
-                                    </div>
-                                    <div class="flex max-w-full  col-span-2 md:col-span-4 xl:col-span-4">
-                                        <h3 class="w-80 overflow-x-auto pr-5 font-semibold text-black">{{$producto->nombre}}</h3>
-                                        <p class="overflow-x-auto sm:hidden md:contents">
-                                        {{$producto->descripcion}}
-                                        </p>
-                                    </div>
-                                    <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic ">
-                                        <div class="flex w-80 min-w-full"> ${{$producto->precio}}
-                                            <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"   type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2" min="0" max="18">
-                                        </div>
-                                    </div>
+                                <div class="flex justify-center bg-coyos-darkpink">
+
+                                    @error('fecha') <span class="text-xl text-white py-3">{{ $message }}</span> @enderror
+                                    @if ($this->hora==null||$this->hora==0)
+                                        @error('hora') <span class="text-xl  text-white py-3">{{ $message }}</span> @enderror
+                                    @endif
+
                                 </div>
-                            @endforeach
+                            <hr>
+                            <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
+                                @if ($this->quedanPaquetesDisponiblesParaFecha($fecha))
+                                    @foreach ($productos as $producto)
+                                        <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
+                                            <div class="col-span-2 sm:col-span-1 xl:col-span-1">
+                                                <img
+                                                    alt="{{$producto->nombre}}"
+                                                    src="{{asset('storage/'.$producto->imagen_1)}}"
+                                                    class="h-24 w-24 rounded  mx-auto" />
+                                            </div>
+                                            <div class="flex max-w-full  col-span-2 md:col-span-4 xl:col-span-4">
+                                                <h3 class="w-80 overflow-x-auto pr-5 font-semibold text-black">{{$producto->nombre}}</h3>
+                                                <p class="overflow-x-auto sm:hidden md:contents">
+                                                {{$producto->descripcion}}
+                                                </p>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic ">
+                                                <div class="flex w-80 min-w-full"> ${{$producto->precio}}
+                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"   type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2" min="0" max="18">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                        <div class="flex-col align-center text-center">
+                                           <h2 class="text-3xl text-bold text-coyos-lightpink border-b border-coyos-lightyellow my-3">No hay paquetes de coyotas disponibles para este día</h2>
+                                           <h2 class="text-2xl text-bold text-coyos-darkblue  my-3">Seleccione otra fecha para hacer su pedido. ;)</h2>
+                                        </div>
+                                @endif
                             </div>
 
                         </div>
@@ -126,14 +133,18 @@
                                 </div>
                             @endif
 
-                            <div class="p-4 justify-center flex">
-                                <button wire:click="registrarPedido()" class="text-base  undefined  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer
-                hover:bg-coyos-darkpink hover:text-coyos-lightblue
-                bg-coyos-lightblue
-                text-coyos-lightpink
-                border duration-200 ease-in-out
-                border-coyos-darkblue transition">Registrar Pedido ${{$this->montoTotal}}</button>
-                            </div>
+                            @if ($this->cuantosArticulos>0)
+                                <div class="p-4 justify-center flex">
+                                    <button wire:click="registrarPedido()" class="text-base  undefined  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer
+                                        hover:bg-coyos-darkpink hover:text-coyos-lightblue
+                                        bg-coyos-lightblue
+                                        text-coyos-lightpink
+                                        border duration-200 ease-in-out
+                                        border-coyos-darkblue transition">Registrar Pedido ${{$this->montoTotal}}
+                                    </button>
+                                </div>
+                            @endif
+
                         </div>
                     </div>
                     </div>

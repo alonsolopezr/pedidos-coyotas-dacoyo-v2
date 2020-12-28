@@ -24,6 +24,7 @@ class Pedido extends Model
         'hora',
         'cancelado',
         'cliente_id',
+        'sucursal',
         'num_del_dia',
         'paquetes_de_coyotas',
 
