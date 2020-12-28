@@ -50,6 +50,7 @@ Route::get('qr-code/examples/phone', function ()
 Route::get('qr-code', function ()
 {
     QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setOutFile(public_path('storage/images/qrpedidos/qr_pedido.png'))->svg();
+    QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setOutFile(public_path('storage/images/qrpedidos/qr_pedido.png'))->svg();
     return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
         ->setMargin(2)
         ->svg();

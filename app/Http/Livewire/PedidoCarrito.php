@@ -21,6 +21,7 @@ class PedidoCarrito extends Component
     public $pedido;
     public $cuantosArticulos;
     public $montoTotal;
+    public $paquetesDeCoyotas;
     public $fecha;
     public $hora;
     public $contadorPedidosPorDia;
@@ -29,6 +30,8 @@ class PedidoCarrito extends Component
     public $apartirHora = '13:55';
     public $lapsoDeMin = '5';
     public $mesesMaxParaApartar = 2;
+    //horas disponibles
+    public $horasDisponiblesDelDia;
     //sucursal
     public $sucursal = 'VILLA_DE_SERIS';
 
@@ -42,7 +45,7 @@ class PedidoCarrito extends Component
         $this->calculaMontoTotal();
         //se determina el dia siguiente para el selector de fecha
         $this->diaSiguiente();
-
+        $this->cargarHorasDisponiblesDelDia($this->fecha);
         return view('livewire.pedido-carrito');
     }
 
@@ -66,6 +69,24 @@ class PedidoCarrito extends Component
         //actualizar carrito
         $this->contarArticulos();
     }
+
+    public function quedanPaquetesDisponiblesParaFecha($fecha)
+    {
+        return $this->paquetesDisponiblesParaFecha($fecha) < 50 ? true : false;
+    }
+
+    public function paquetesDisponiblesParaFecha($fecha)
+    {
+        $pedidos = Pedido::where('fecha', '=', $fecha)->get()->count();
+        $numPaquetes = 0;
+        foreach ($pedidos as $key => $pedido)
+        {
+            # sacar los paquetes pedidos para ese día
+            $numPaquetes += $pedido->productosDePedido()->cantidad;
+        }
+        return $numPaquetes;
+    }
+
 
     public function agregarACarrito($prodId, $cantidad)
     {
@@ -120,7 +141,10 @@ class PedidoCarrito extends Component
                         $this->quitarDelCarrito($key);
                     else
                     {
+                        //se agrega al array de carrito
                         $this->pedido[$key]['cantidad'] = $cantidad;
+                        //se adiciona al total de coytas del pedido
+                        $this->paquetesDeCoyotas += $cantidad;
                     }
 
                     return true;
@@ -131,6 +155,8 @@ class PedidoCarrito extends Component
     }
     public function quitarDelCarrito($idx)
     {
+        //restar del total de paquetes
+        $this->paquetesDeCoyotas -= $this->pedido[$idx]['cantidad'];
         //quitar elemento del carrito por idx
         unset($this->pedido[$idx]);
     }
@@ -146,18 +172,63 @@ class PedidoCarrito extends Component
             }
     }
 
+    public function calculaTotalDePaquetes()
+    {
+        $this->paquetesDeCoyotas = 0;
+        if ($this->pedido != null)
+            foreach ($this->pedido as $key => $articulo)
+            {
+                $this->paquetesDeCoyotas += $articulo['cantidad'];
+            }
+    }
+
+    public function numSiguientePedido($fecha)
+    {
+        $contadorPorDia = count(Pedido::where('fecha', '=', $fecha)->latest()->get());
+        $contadorCampo = Pedido::where('fecha', '=', $fecha)->count() == 0 ? '0' : Pedido::where('fecha', '=', $fecha)->latest()->first()->num_del_dia;
+        // dd('debug pedidos', $contadorPorDia, $contadorCampo, $fecha);
+        return $contadorCampo + 1;
+    }
+
+    public function estaApartadaLaHora($fecha, $hora)
+    {
+        //si first() es null, true, sino false
+        return Pedido::where('fecha', '=', $fecha)->where('hora', '=', $hora)->first() ? true : false;
+    }
+
+
+    public function cargarHorasDisponiblesDelDia($fecha)
+    {
+        $this->horasDisponiblesDelDia = [];
+        $this->horaEntregas = Carbon::parse($this->apartirHora);
+        for ($i = 0; $i <= 50; $i++)
+        {
+            $hora = $this->horaEntregas->addMinutes(5);
+            $hora = $hora->format('H:i');
+            if ($this->estaApartadaLaHora($fecha, $hora) == false)
+                $this->horasDisponiblesDelDia[] = $hora; //validamos si la hora está apartada
+        }
+    }
+
+
     public function registrarPedido()
     {
 
         //hacer el store
         // Http::post('ruta_api_guardar');
 
+        $this->calculaTotalDePaquetes();
+        //calcular cuantos paquetes puede apartar y si los sobrepasa,
+        //ERROR, devolver  e indicarle que no debe pasar de X paquetes...
+
         DB::transaction(function ()
         {
+            $numDelDia = $this->numSiguientePedido($this->fecha);
+            //dd($numDelDia);
             //guardar pedido
             $pedido = Pedido::create(
                 [
-                    "folio" => Pedido::numSiguientePedido($this->fecha),
+                    "folio" => $numDelDia,
                     "qr" => "000011",
                     "status" => 1,
                     "paga_en_tienda" => 1,
@@ -166,6 +237,8 @@ class PedidoCarrito extends Component
                     "hora" => $this->hora,
                     "cancelado" => 0,
                     "cliente_id" => Auth::user()->id,
+                    "num_del_dia" => $numDelDia,
+                    "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
                 ]
             );
 

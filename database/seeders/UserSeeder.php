@@ -60,6 +60,16 @@ class UserSeeder extends Seeder
                 "celular" => "6621379254",
                 "password" => Hash::make('123123123'),
                 "is_admin" => 0,
+                "is_client" => 1,
+            ],
+            6 => [
+                "name" => "Otro Cliente Alonso",
+                "lastname" => "Lopez Romo",
+                "email" => "alonso_lopez_r@yahoo.com.mx",
+                "celular" => "6621379254",
+                "password" => Hash::make('123123123'),
+                "is_admin" => 0,
+                "is_client" => 1,
             ],
         ];
 

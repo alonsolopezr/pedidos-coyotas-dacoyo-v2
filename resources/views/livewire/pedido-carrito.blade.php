@@ -23,18 +23,23 @@
 
                                     <input wire:model.debounce="fecha" min="{{$fecha}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black">a las</h4>
-                                    <select  name="hora" id="hora"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
+                                    <select  name="hora" id="hora" wire.change="cargarHorasDisponiblesDelDia(document.getElementById('hora'))"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
                                         {{-- <option value="13:45">2:00pm</option> --}}
-                                        @php
+                                        {{-- @php
                                             $this->horaEntregas=Carbon\Carbon::parse($this->apartirHora);
                                         @endphp
                                         @for($i=0;$i<=50; $i++)
                                             @php
                                                 $hora=$this->horaEntregas->addMinutes(5);
                                                 $hora=$hora->format('H:i');
+                                                //validamos si la hora está apartada
+
                                             @endphp
                                             <option value="{{$hora}}">{{$hora}}</option>
-                                        @endfor
+                                        @endfor --}}
+                                        @foreach($this->horasDisponiblesDelDia as $hora)
+                                            <option value="{{$hora}}" >{{$hora}}</option>
+                                        @endforeach
                                     </select>
                                     {{-- sucursal --}}
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black"> en Sucursal: </h4>
