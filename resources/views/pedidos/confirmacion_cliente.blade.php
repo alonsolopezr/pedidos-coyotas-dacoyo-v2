@@ -20,7 +20,7 @@
                                             Su Pedido ha sido registrado. Al pasar por el muestre este Código QR:
                                         </p>
                                         {{-- <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="{!! QRCode::size(100)->generate(auth()->user()->pedidos()->latest()->first()->id) !!}" alt=""> --}}
-                                        <img class="inline-block align-middle mb-2 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="storage/images/qrpedidos/qr_pedido{{auth()->user()->pedidos()->latest()->first()->id}}.svg" alt="">
+                                        <img class="inline-block align-middle mb-6 border-solid border-coyos-lightyellow border-4 rounded-2xl " src="storage/images/qrpedidos/qr_pedido{{auth()->user()->pedidos()->latest()->first()->id}}.svg" alt="">
                                     </div>
                                 </div>
 
@@ -36,11 +36,19 @@
                                         <h4 class="rounded bg-coyos-lightblue mr-3 px-2">{{ucwords(str_replace("_", " ", auth()->user()->pedidos()->latest()->first()->sucursal))}}</h4>
                                         <hr>
                                         <hr>
-
-
                                     </div>
-
                                 </div>
+                                <div class="row flex justify-center my-2">
+                                     <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
+                                        <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted paga :</h3>
+                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2">$ {{auth()->user()->pedidos()->latest()->first()->monto_total}}</h4>
+                                        <h3 class="overflow-x-auto pr-5 font-semibold text-black"> por sus </h3>
+                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> {{auth()->user()->pedidos()->latest()->first()->paquetes_de_coyotas}} </h4>
+                                        <h3 class="overflow-x-auto pr-5 font-semibold text-black"> paquetes de coyotas: </h3>
+                                        <hr>
+                                    </div>
+                                </div>
+
                                 <h2 class="text-center text-xl py-2 my-4 text-coyos-darkblue font-extrabold border-t border-b border-coyos-lightpink">¡Gracias por su preferencia!</h2>
 
                                 <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
@@ -61,7 +69,7 @@
                                         </div>
                                         <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic ">
                                             <div class="flex w-80 min-w-full"> ${{$prod->producto->precio}}
-                                                <input class="px-6 bg-gray-300 rounded mx-4" value="{{$prod->cantidad}}"   type="number" value="0"  size="2" min="0" max="18">
+                                                <h3><b class=" font-bold px-6 mx-3 bg-gray-300 rounded">{{$prod->cantidad}}</b></h3>
                                             </div>
                                         </div>
                                     </div>
