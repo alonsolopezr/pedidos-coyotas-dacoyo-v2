@@ -8,12 +8,12 @@
                     <!-- This is an example component -->
                         <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-64">
                             <div class="flex flex-wrap text-center justify-center">
-                                <div class="w-full lg:w-6/12 px-6">
+                                <div class="w-full px-6">
                                     <h2 class="text-4xl font-semibold text-black">Seleccione sus productos</h2>
-                                    <p class="text-lg leading-relaxed mt-4 mb-4 text-gray-900">
+                                    <p class="text-lg mt-4 mb-4 text-gray-900">
                                         Seleccione los paquetes de Coyotas, de nuestras delicias rellenas de piloncillo, jamoncillo y jamoncillo con nuez.
                                     </p>
-                                    <p> Quedan <b>{!!$this->paquetesDisponiblesParaFecha($fecha)!!}</b> paquetes disponibles para este día.</p>
+                                    <p> Quedan <b>{!!$this->paquetesDisponiblesParaFecha($fecha, $this->sucursal)!!}</b> paquetes disponibles para este día en Sucursal <b>{{$this->sucursal}}</b>.</p>
                                 </div>
                             </div>
 
@@ -25,7 +25,7 @@
                                     <input wire:model.debounce="fecha" min="{{Carbon\Carbon::tomorrow()->format('Y-m-d')}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
 
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black">a las</h4>
-                                    <select  name="hora" id="hora" wire.change="cargarHorasDisponiblesDelDia(document.getElementById('hora'))"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
+                                    <select  name="hora" id="hora" wire.change="cargarHorasDisponiblesDelDia(document.getElementById('fecha').value)"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
                                         <option>Elija</option>
                                         @foreach($this->horasDisponiblesDelDia as $hora)
                                             <option  value="{{$hora}}" >{{$hora}}</option>
@@ -34,7 +34,7 @@
 
                                     {{-- sucursal --}}
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black"> en Sucursal: </h4>
-                                    <select name="sucursal" id="sucursal" wire:model="sucursal" class="rounded bg-coyos-lightblue mr-3">
+                                    <select name="sucursal" id="sucursal" wire.change="cargarHorasDisponiblesDelDia({{$this->fecha}})" wire:model="sucursal" class="rounded bg-coyos-lightblue mr-3">
                                         <option value="VILLA_DE_SERIS" selected>Villa de Seris</option>
                                         <option value="OLIVARES">Olivares</option>
                                     </select>
@@ -50,8 +50,30 @@
 
                                 </div>
                             <hr>
+                            {!!'hay chanza? '.$this->errorNoPaquetesDisponibles.' total '.$this->calculaTotalDePaquetes() .$this->paquetesDeCoyotas.'  y   '.$this->paquetesDisponiblesParaFecha($this->fecha, $this->sucursal)!!}
+                            <div class="flex flex-col">
+                            @if ($this->errorNoPaquetesDisponibles)
+                                <div class="flex bg-red-900 max-w-sm mb-4">
+                                    <div class="w-16 bg-red">
+                                        <div class="p-4">
+                                            <svg class="h-8 w-8 text-white fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M437.019 74.981C388.667 26.629 324.38 0 256 0S123.333 26.63 74.981 74.981 0 187.62 0 256s26.629 132.667 74.981 181.019C123.332 485.371 187.62 512 256 512s132.667-26.629 181.019-74.981C485.371 388.667 512 324.38 512 256s-26.629-132.668-74.981-181.019zM256 470.636C137.65 470.636 41.364 374.35 41.364 256S137.65 41.364 256 41.364 470.636 137.65 470.636 256 374.35 470.636 256 470.636z" fill="#FFF"/><path d="M341.22 170.781c-8.077-8.077-21.172-8.077-29.249 0L170.78 311.971c-8.077 8.077-8.077 21.172 0 29.249 4.038 4.039 9.332 6.058 14.625 6.058s10.587-2.019 14.625-6.058l141.19-141.191c8.076-8.076 8.076-21.171 0-29.248z" fill="#FFF"/><path d="M341.22 311.971l-141.191-141.19c-8.076-8.077-21.172-8.077-29.248 0-8.077 8.076-8.077 21.171 0 29.248l141.19 141.191a20.616 20.616 0 0 0 14.625 6.058 20.618 20.618 0 0 0 14.625-6.058c8.075-8.077 8.075-21.172-.001-29.249z" fill="#FFF"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="w-auto text-black opacity-75 items-center p-4">
+                                        <span class="text-lg font-bold pb-4">
+                                            ¡Atención!
+                                        </span>
+                                        <p class="leading-tight">
+                                            Ya no se pueden agregar más paquetes en este dia, en esta sucursal.
+                                        </p>
+                                    </div>
+                                </div>
+                            @else
+
+                            @endif
+                            </div>
                             <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
-                                @if ($this->quedanPaquetesDisponiblesParaFecha($fecha))
+                                @if ($this->quedanPaquetesDisponiblesParaFecha($fecha, $this->sucursal))
                                     @foreach ($productos as $producto)
                                         <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
                                             <div class="col-span-2 sm:col-span-1 xl:col-span-1">
@@ -68,7 +90,7 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic ">
                                                 <div class="flex w-80 min-w-full"> ${{$producto->precio}}
-                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"   type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2" min="0" max="18">
+                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2" min="0" max="18">
                                                 </div>
                                             </div>
                                         </div>
@@ -133,7 +155,7 @@
                                 </div>
                             @endif
 
-                            @if ($this->cuantosArticulos>0)
+                            @if ($this->cuantosArticulos>0 && $this->errorNoPaquetesDisponibles==false)
                                 <div class="p-4 justify-center flex">
                                     <button wire:click="registrarPedido()" class="text-base  undefined  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer
                                         hover:bg-coyos-darkpink hover:text-coyos-lightblue

@@ -34,6 +34,7 @@ class PedidoCarrito extends Component
     public $horasDisponiblesDelDia;
     //sucursal
     public $sucursal = 'VILLA_DE_SERIS';
+    public $errorNoPaquetesDisponibles;
 
 
     public function render()
@@ -45,7 +46,7 @@ class PedidoCarrito extends Component
         $this->calculaMontoTotal();
         //se determina el dia siguiente para el selector de fecha
         $this->diaSiguiente();
-        $this->cargarHorasDisponiblesDelDia($this->fecha);
+        $this->cargarHorasDisponiblesDelDia($this->fecha, $this->sucursal);
         return view('livewire.pedido-carrito');
     }
 
@@ -70,14 +71,14 @@ class PedidoCarrito extends Component
         $this->contarArticulos();
     }
 
-    public function quedanPaquetesDisponiblesParaFecha($fecha)
+    public function quedanPaquetesDisponiblesParaFecha($fecha, $sucursal)
     {
-        return $this->paquetesDisponiblesParaFecha($fecha) > 0 ? true : false;
+        return $this->paquetesDisponiblesParaFecha($fecha, $sucursal) > 0 ? true : false;
     }
 
-    public function paquetesDisponiblesParaFecha($fecha)
+    public function paquetesDisponiblesParaFecha($fecha, $sucursal)
     {
-        $pedidos = Pedido::where('fecha', '=', $fecha)->get();
+        $pedidos = Pedido::where('fecha', '=', $fecha)->where('sucursal', '=', $sucursal)->get();
         $numPaquetes = 0;
         if ($pedidos != null && count($pedidos) > 0)
             foreach ($pedidos as $key => $pedido)
@@ -89,45 +90,59 @@ class PedidoCarrito extends Component
         return 50 - $numPaquetes <= 0 ? 0 : 50 - $numPaquetes;
     }
 
-    public function paquetesDisponiblesParaEstePedido($fecha)
-    {
-        $pedidos = Pedido::where('fecha', '=', $fecha)->get();
-        $numPaquetes = 0;
-        dd($pedidos);
-        if ($pedidos != null && count($pedidos) > 0)
-            foreach ($pedidos as $key => $pedido)
-            {
-                # sacar los paquetes pedidos para ese día
-                $numPaquetes += $pedido->productosDePedido()->cantidad;
-            }
-        return 50 - $numPaquetes;
-    }
+
 
     public function agregarACarrito($prodId, $cantidad)
     {
         //parsear prodId
         $prodId = str_replace("coyo", "", $prodId);
         $prod = $this->obtenerProductoDeArray($prodId);
-
-        //dd($this->pedido, $prodId, $cantidad, $prod->precio);
-        //si ya está en el carrito, actualiza cantidad
-        if ($this->siExisteActualiza($prodId, $cantidad) == null)
-        {
-            //agregar a carrito por cantidades
-            // $this->pedido[$this->cuantosArticulos] = [
-            $this->pedido[$prodId] = [
-                "id" => $prodId,
-                "nombre" => $prod->nombre,
-                "descripcion" => $prod['descripcion'],
-                "precio" => $prod['precio'],
-                "imagen_1" => $prod['imagen_1'],
-                "cantidad" => $cantidad,
-                //TODO: necesitamos mas??
-            ];
-        }
-        $this->calculaMontoTotal();
+        $paquetesDisponibles = $this->paquetesDisponiblesParaFecha($this->fecha, $this->sucursal);
         $this->calculaTotalDePaquetes();
-        //dd($this->pedido, $prodId, $cantidad, $prod);
+        //dd($this->pedido, $prodId, $cantidad, $prod->precio);
+        if ($this->paquetesDeCoyotas <= $paquetesDisponibles)
+        {
+            $this->errorNoPaquetesDisponibles = false;
+            //si ya está en el carrito, actualiza cantidad
+            if ($this->siExisteActualiza($prodId, $cantidad) == null)
+            {
+                //agregar a carrito por cantidades
+                $this->pedido[$prodId] = [
+                    "id" => $prodId,
+                    "nombre" => $prod->nombre,
+                    "descripcion" => $prod['descripcion'],
+                    "precio" => $prod['precio'],
+                    "imagen_1" => $prod['imagen_1'],
+                    "cantidad" => $cantidad,
+                    //TODO: necesitamos mas??
+                ];
+            }
+            $this->calculaMontoTotal();
+            $this->calculaTotalDePaquetes();
+            //dd($this->pedido, $prodId, $cantidad, $prod);
+        }
+        else
+        {
+            $this->errorNoPaquetesDisponibles = true;
+            //mostrar alert de que no hay mas paquetes disponibles
+            //disminuir cantidad
+            $this->paquetesDeCoyotas -= 2;
+            if ($this->siExisteActualiza($prodId, $cantidad - 1) == null)
+            {
+                //agregar a carrito por cantidades
+                $this->pedido[$prodId] = [
+                    "id" => $prodId,
+                    "nombre" => $prod->nombre,
+                    "descripcion" => $prod['descripcion'],
+                    "precio" => $prod['precio'],
+                    "imagen_1" => $prod['imagen_1'],
+                    "cantidad" => $cantidad - 1,
+                    //TODO: necesitamos mas??
+                ];
+            }
+            $this->calculaMontoTotal();
+            $this->calculaTotalDePaquetes();
+        }
     }
 
     public function obtenerProductoDeArray($prodId)
@@ -206,14 +221,14 @@ class PedidoCarrito extends Component
         return $contadorCampo + 1;
     }
 
-    public function estaApartadaLaHora($fecha, $hora)
+    public function estaApartadaLaHora($fecha, $hora, $sucursal)
     {
         //si first() es null, true, sino false
-        return Pedido::where('fecha', '=', $fecha)->where('hora', '=', $hora)->first() ? true : false;
+        return Pedido::where('fecha', '=', $fecha)->where('hora', '=', $hora)->where('sucursal', '=', $sucursal)->first() ? true : false;
     }
 
 
-    public function cargarHorasDisponiblesDelDia($fecha)
+    public function cargarHorasDisponiblesDelDia($fecha, $sucursal)
     {
         $this->horasDisponiblesDelDia = [];
         $this->horaEntregas = Carbon::parse($this->apartirHora);
@@ -221,7 +236,7 @@ class PedidoCarrito extends Component
         {
             $hora = $this->horaEntregas->addMinutes(5);
             $hora = $hora->format('H:i');
-            if ($this->estaApartadaLaHora($fecha, $hora) == false)
+            if ($this->estaApartadaLaHora($fecha, $hora, $sucursal) == false)
                 $this->horasDisponiblesDelDia[] = $hora; //validamos si la hora está apartada
         }
     }
