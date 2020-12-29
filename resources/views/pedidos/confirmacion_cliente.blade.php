@@ -26,7 +26,7 @@
 
                                 <hr>
                                 <div class="row flex justify-center my-2">
-                                    <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
+                                    <div class="flex max-w-max-content flex-col md:flex-row col-span-2 md:col-span-4 xl:col-span-4">
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted pasa por su pedido el día :</h3>
                                         <h4 class="rounded bg-coyos-lightblue mr-3 px-2">{{auth()->user()->pedidos()->latest()->first()->fecha}}</h4>
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black"> a las </h3>
@@ -34,18 +34,21 @@
                                         {{-- sucursal --}}
                                         <h4 class="overflow-x-auto pr-5 font-semibold text-black"> en Sucursal :</h4>
                                         <h4 class="rounded bg-coyos-lightblue mr-3 px-2">{{ucwords(str_replace("_", " ", auth()->user()->pedidos()->latest()->first()->sucursal))}}</h4>
-                                        <hr>
-                                        <hr>
+
                                     </div>
                                 </div>
+                                 <hr>
                                 <div class="row flex justify-center my-2">
-                                     <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
+                                     <div class="flex max-w-max-content flex-col md:flex-row  col-span-2 md:col-span-4 xl:col-span-4">
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted paga :</h3>
-                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2">$ {{auth()->user()->pedidos()->latest()->first()->monto_total}}</h4>
+                                        @php
+                                            setlocale(LC_MONETARY,'es_MX.UTF-8');
+                                            $totalMXN=auth()->user()->pedidos()->latest()->first()->monto_total;
+                                        @endphp
+                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> ${!! money_format('%n',$totalMXN) !!}</h4>
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black"> por sus </h3>
                                         <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> {{auth()->user()->pedidos()->latest()->first()->paquetes_de_coyotas}} </h4>
-                                        <h3 class="overflow-x-auto pr-5 font-semibold text-black"> paquetes de coyotas: </h3>
-                                        <hr>
+                                        <h3 class="overflow-x-auto pr-5 font-semibold text-black">  paquetes de coyotas. </h3>
                                     </div>
                                 </div>
 

@@ -10,7 +10,7 @@
                             <div class="flex flex-wrap text-center justify-center">
                                 <div class="w-full px-6">
                                     <h2 class="text-4xl font-semibold text-black">Seleccione sus productos</h2>
-                                    <p class="text-lg mt-4 mb-4 text-gray-900">
+                                    <p class="text-lg  sm:min-w-min-content mt-4 mb-4 text-gray-900 lg:max-w-max-content">
                                         Seleccione los paquetes de Coyotas, de nuestras delicias rellenas de piloncillo, jamoncillo y jamoncillo con nuez.
                                     </p>
                                     <p> Quedan <b>{!!$this->paquetesDisponiblesParaFecha($fecha, $this->sucursal)!!}</b> paquetes disponibles para este día en Sucursal <b>{{$this->sucursal}}</b>.</p>
@@ -18,11 +18,11 @@
                             </div>
 
                             <hr>
-                            <div class="row flex justify-center my-2">
-                                <div class="flex max-w-max-content col-span-2 md:col-span-4 xl:col-span-4">
+                            <div class="flex flex-row justify-center my-2">
+                                <div class="flex lg:flex-row flex-col max-w-max-content col-span-2 sm:w-full text-center align-middle justify-center md:col-span-4 xl:col-span-4">
                                     <h3 class="overflow-x-auto pr-5 font-semibold text-black">Usted pasa por su pedido el día:</h3>
 
-                                    <input wire:model.debounce="fecha" min="{{Carbon\Carbon::tomorrow()->format('Y-m-d')}}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
+                                    <input wire:model.debounce="fecha" min="{{Carbon\Carbon::now('-7:00')->addDay()->locale('es_MX')->format('Y-m-d') }}" max="{{Carbon\Carbon::tomorrow()->addMonths($this->mesesMaxParaApartar)->format('Y-m-d')}}"  type="date" name="fecha" id="fecha"  class="rounded bg-coyos-lightblue mx-3"/>
 
                                     <h4 class="overflow-x-auto pr-5 font-semibold text-black">a las</h4>
                                     <select  name="hora" id="hora" wire.change="cargarHorasDisponiblesDelDia(document.getElementById('fecha').value)"  wire:model="hora" required  class="rounded bg-coyos-lightblue mr-3">
@@ -39,6 +39,7 @@
                                         <option value="OLIVARES">Olivares</option>
                                     </select>
                                 </div>
+
                             </div>
                             <hr>
                                 <div class="flex justify-center bg-coyos-darkpink">
@@ -72,25 +73,26 @@
 
                             @endif
                             </div>
-                            <div class="flex flex-wrap w-80  min-w-full mt-12 justify-center">
+                            <div class="flex flex-wrap justify-center  min-w-full mt-12  ">
                                 @if ($this->quedanPaquetesDisponiblesParaFecha($fecha, $this->sucursal))
                                     @foreach ($productos as $producto)
-                                        <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
-                                            <div class="col-span-2 sm:col-span-1 xl:col-span-1">
+                                        <div class="grid mx-auto grid-cols-3 gap-y-4 sm:grid-cols-4 ">
+                                            <div class="col-span-1 sm:col-span-1 xl:col-span-1">
                                                 <img
                                                     alt="{{$producto->nombre}}"
                                                     src="{{asset('storage/'.$producto->imagen_1)}}"
                                                     class="h-24 w-24 rounded  mx-auto" />
                                             </div>
-                                            <div class="flex max-w-full  col-span-2 md:col-span-4 xl:col-span-4">
+                                            <div class="flex max-w-full  col-span-1 sm:col-span-2 ">
                                                 <h3 class="w-80 overflow-x-auto pr-5 font-semibold text-black">{{$producto->nombre}}</h3>
-                                                <p class="overflow-x-auto sm:hidden md:contents">
+                                                <p class="overflow-x-auto hidden md:contents">
                                                 {{$producto->descripcion}}
                                                 </p>
                                             </div>
-                                            <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic ">
-                                                <div class="flex w-80 min-w-full"> ${{$producto->precio}}
-                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2" min="0" max="18">
+                                            <div class="col-span-1 sm:col-span-1 md:col-span-1 italic ">
+                                                <div class="flex flex-row  min-w-full">
+                                                    ${{$producto->precio}}
+                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}"  size="2" min="0" max="20">
                                                 </div>
                                             </div>
                                         </div>

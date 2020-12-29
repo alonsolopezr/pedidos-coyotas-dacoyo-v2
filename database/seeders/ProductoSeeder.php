@@ -17,25 +17,25 @@ class ProductoSeeder extends Seeder
         //
         $coyotas =  [
             [
-                'nombre' => 'Paquete de Coyotas - Piloncillo',
+                'nombre' => 'Paquete de 10 Coyotas - Piloncillo',
                 'descripcion' => 'Paquete de Coyotas con 10 piezas, rellenas de Piloncillo.',
                 'imagen_1' => 'images/productos/coyotas_piloncillo.jpg',
                 'precio' => 80.00,
             ],
             [
-                'nombre' => 'Paquete de Coyotas - Jamoncillo',
+                'nombre' => 'Paquete de 10 Coyotas - Jamoncillo',
                 'descripcion' => 'Paquete de Coyotas con 10 piezas, rellenas de Jamoncillo.',
                 'imagen_1' => 'images/productos/coyotas_jamoncillo.jpg',
                 'precio' => 90.00,
             ],
             [
-                'nombre' => 'Paquete de Coyotas - Jamoncillo con Nuéz',
+                'nombre' => 'Paquete de 10 Coyotas - Jamoncillo con Nuéz',
                 'descripcion' => 'Paquete de Coyotas con 10 piezas, rellenas de Jamoncillo con Nuéz.',
                 'imagen_1' => 'images/productos/coyotas_jam_con_nuez.jpg',
                 'precio' => 100.00,
             ],
             [
-                'nombre' => 'Paquete de Coyotas - Surtido',
+                'nombre' => 'Paquete de 10 Coyotas - Surtido',
                 'descripcion' => 'Paquete de Coyotas con 10 piezas, surtido con los trés rellenos: Piloncillo, Jamoncillo y Jamoncillo con Nuéz.',
                 'imagen_1' => 'images/productos/coyotas_surtidas.jpg',
                 'precio' => 90.0,
