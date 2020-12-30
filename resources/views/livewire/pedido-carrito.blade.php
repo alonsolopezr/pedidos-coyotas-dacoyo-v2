@@ -1,16 +1,16 @@
 <div>
     <div class=" flex flex-wrap mx-2 justify-center">
-        <div class="py-12">
+        <div class="py-12 max-w-screen-lg">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-coyos-lightbrown overflow-hidden shadow-xl sm:rounded-lg">
                     <form action="{{route('pedidos.store')}}" method="POST">
                         @csrf
                     <!-- This is an example component -->
                         <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-64">
-                            <div class="flex flex-wrap text-center justify-center">
-                                <div class="w-full px-6">
+                            <div class="flex flex-wrap ">
+                                <div class="w-full text-center justify-center px-6">
                                     <h2 class="text-4xl font-semibold text-black">Seleccione sus productos</h2>
-                                    <p class="text-lg  sm:min-w-min-content mt-4 mb-4 text-gray-900 lg:max-w-max-content">
+                                    <p class="text-lg mt-4 mb-4 text-gray-900 max-w-full">
                                         Seleccione los paquetes de Coyotas, de nuestras delicias rellenas de piloncillo, jamoncillo y jamoncillo con nuez.
                                     </p>
                                     <p> Quedan <b>{!!$this->paquetesDisponiblesParaFecha($fecha, $this->sucursal)!!}</b> paquetes disponibles para este día en Sucursal <b>{{$this->sucursal}}</b>.</p>
@@ -111,11 +111,11 @@
             </div>
         </div>
         {{-- carrito --}}
-         <div class="p-5">
-            <div class="flex h-64 justify-center">
-                <div class="relative ">
-                    <div class="flex flex-row cursor-pointer truncate p-2 px-4  rounded">
-                        <div></div>
+         <div class="p-5 mt-0 lg:mt-7">
+            <div class="flex  justify-center">
+                <div class="bg-coyos-midbrown rounded">
+                    <div class="flex flex-row bg-coyos-lightyellow cursor-pointer truncate p-2 px-4  rounded">
+                        <div class="font-bold text-lg">Su Pedido:</div>
                         <div class="flex flex-row-reverse ml-2 w-full">
                             <div slot="icon" class="relative">
                                 <div class="absolute text-xs rounded-full -mt-1 -mr-2 px-1 font-bold top-0 right-0 bg-red-700 text-white">{{$this->cuantosArticulos}}</div>
@@ -127,7 +127,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="absolute w-full  rounded-b border-t-0 z-10">
+                    <div class=" w-full  rounded-b border-t-0 z-10">
                         <div class="shadow-xl w-64">
 
                             @if ($pedido!=null && $pedido!=0)

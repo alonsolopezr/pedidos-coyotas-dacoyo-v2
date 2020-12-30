@@ -28,6 +28,23 @@
     "Your Orders": "Tus Pedidos",
 
 
+    "Profile Information": "Información de Perfil",
+    "Update your account's profile information and email address.": "Actualiza la información de tu Perfil y Correo Electrónico.",
+    "Update Password": "Actualiza tu Contraseña",
+    "Current Password": "Contraseña Actual",
+    "New Password": "Contraseña Nueva",
+    "Confirm Password": "Confirma la nueva Contraseña",
+    "Ensure your account is using a long, random password to stay secure.": "Asegurate que estás usando una contraseña larga y aleatoria para permanecer seguro.",
+
+    "Save": "Guardar",
+    "Nevermind": "Olvídalo",
+    "Enable": "Habilitar",
+    "Delete Account": "Borrar Cuenta",
+    "Logout Other Browser Sessions": "Cerrar las otras sesiones abiertas",
+    "Browser Sessions": "Sesiones Abiertas",
+    "Permanently delete your account.": "Borre definitivamente su cuenta.",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Una vez que su cuenta sea eliminada, todos sus recursos y datos serán borrados. Antes de borrar su cuenta, por favor descargue cualquier dato o información que desee convervar.",
+
 
     "lastone": "último"
 }
