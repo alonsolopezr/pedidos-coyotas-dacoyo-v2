@@ -18,7 +18,7 @@ class PedidoController extends Controller
     {
         //muestra todos los pedidos
         $pedidos = Pedido::all();
-        dd($pedidos);
+        //dd($pedidos);
         return view('pedidos.index', compact('pedidos'));
     }
 
