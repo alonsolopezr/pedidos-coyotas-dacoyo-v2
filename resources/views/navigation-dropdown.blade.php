@@ -10,6 +10,25 @@
                     </a>
                 </div>
 
+                <!--ADMIN Navigation Links -->
+                @if (Auth::user()->is_admin)
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('pedidos.admin-index-pendientes') }}" :active="request()->routeIs('pedidos.create')">
+                            {{ __('All Pending Orders') }}
+                        </x-jet-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('pedidos.admin-confirmar-pedidos') }}" :active="request()->routeIs('pedidos.index')">
+                            {{ __('Confirm Client\'s Orders') }}
+                        </x-jet-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('pedidos.entrega-por-qr') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Read QR & Deliver') }}
+                        </x-jet-nav-link>
+                    </div>
+                @endif
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('pedidos.create') }}" :active="request()->routeIs('pedidos.create')">

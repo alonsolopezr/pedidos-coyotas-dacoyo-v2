@@ -1,6 +1,7 @@
 <?php
 
 use LaravelQRCode\Facades\QRCode;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PedidoController;
 
@@ -34,6 +35,15 @@ Route::get('pedidos_confirmacion_cliente', function ()
     return view('pedidos.confirmacion_cliente');
 })->middleware(['auth:sanctum'])->name('pedidos.confirmacion_cliente');
 
+Route::get('admin_index_pedidos', [PedidoController::class, 'indexPedidosPendientes'])->middleware(['auth:sanctum'])->name('pedidos.admin-index-pendientes');
+
+Route::get('admin_confirmar_pedidos', [PedidoController::class, 'confirmarPedidosDeClientes'])->middleware(['auth:sanctum'])->name('pedidos.admin-confirmar-pedidos');
+
+Route::put('admin_confirmar_pedido', [PedidoController::class, 'confirmaPedidoUpdate'])->middleware(['auth:sanctum'])->name('pedidos.admin-confirma-pedido-update');
+
+Route::put('admin_cancela_pedidos', [PedidoController::class, 'cancelaPedidoUpdate'])->middleware(['auth:sanctum'])->name('pedidos.admin-cancela-pedido-update');
+
+Route::get('admin_entrega_por_qr', [PedidoController::class, 'entregaPorQR'])->middleware(['auth:sanctum'])->name('pedidos.entrega-por-qr');
 
 //////////////////////////////////////////////////////////////////////
 ///////////PRUEBAS DE QR CODE!!!!!///////////////////////////////
