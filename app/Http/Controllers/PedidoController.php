@@ -24,7 +24,8 @@ class PedidoController extends Controller
         //muestra todos los pedidos
         $pedidos = Pedido::all();
         //dd($pedidos);
-        return view('pedidos.index', compact('pedidos'));
+        // return view('pedidos.index', compact('pedidos'));
+        return response()->json($pedidos, 200);
     }
 
     /**
@@ -119,7 +120,8 @@ class PedidoController extends Controller
         //consulta todos de nuevo
         $pedidos = Pedido::all();
         //redirect a index
-        return redirect()->route('pedidos.admin-index-pendientes', compact('pedidos'));
+        // return redirect()->route('pedidos.admin-index-pendientes', compact('pedidos'));
+        return response('Pedido creado', 200);
     }
     /**
      * Store a newly created resource in storage.
@@ -152,7 +154,7 @@ class PedidoController extends Controller
     {
         //almacena pedido
 
-        dd($request);
+        //dd($request);
         //almacenar pedido
         // $pedido = Pedido::create($validated);
         //almacenar productos de pedido

@@ -45,7 +45,8 @@
                                             setlocale(LC_MONETARY,'es_MX.UTF-8');
                                             $totalMXN=auth()->user()->pedidos()->latest()->first()->monto_total;
                                         @endphp
-                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> ${!! money_format('%n',$totalMXN) !!}</h4>
+                                        {{-- <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> ${!! money_format('%n',$totalMXN) !!}</h4> --}}
+                                        <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> ${!! number_format($totalMXN, 2, '.', ''); !!}</h4>
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black"> por sus </h3>
                                         <h4 class="rounded bg-coyos-lightblue mr-3 px-2"> {{auth()->user()->pedidos()->latest()->first()->paquetes_de_coyotas}} </h4>
                                         <h3 class="overflow-x-auto pr-5 font-semibold text-black">  paquetes de coyotas. </h3>

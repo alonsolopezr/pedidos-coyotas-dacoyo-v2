@@ -268,6 +268,20 @@ class PedidoCarrito extends Component
             $stringQr = Carbon::create($this->fecha)->format('Ymd') . '*' . Carbon::create($this->hora)->format('Hi') . '*' . $this->sucursal . '*' . $numDelDia;
             //dd($numDelDia);
             //guardar pedido
+            // dd([
+            //     "folio" => $stringQr,
+            //     "qr" => "000011",
+            //     "status" => 1,
+            //     "paga_en_tienda" => 1,
+            //     "monto_total" => $this->montoTotal,
+            //     "fecha" => $this->fecha,
+            //     "hora" => $this->hora,
+            //     "cancelado" => 0,
+            //     "cliente_id" => Auth::user()->id,
+            //     "sucursal" => $this->sucursal,
+            //     "num_del_dia" => $numDelDia,
+            //     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+            // ]);
             $pedido = Pedido::create(
                 [
                     "folio" => $stringQr,
@@ -288,6 +302,11 @@ class PedidoCarrito extends Component
             //guardar productos de pedido
             foreach ($this->pedido as $key => $articulo)
             {
+                // dd([
+                //     "pedido_id" => $pedido->id,
+                //     "producto_id" => $articulo['id'],
+                //     "cantidad" => $articulo['cantidad'],
+                // ]);
                 ProductosDePedido::create([
                     "pedido_id" => $pedido->id,
                     "producto_id" => $articulo['id'],
