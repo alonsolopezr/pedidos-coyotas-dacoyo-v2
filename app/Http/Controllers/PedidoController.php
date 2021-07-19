@@ -154,7 +154,7 @@ class PedidoController extends Controller
     {
         //almacena pedido
 
-        //dd($request);
+        dd($request);
         //almacenar pedido
         // $pedido = Pedido::create($validated);
         //almacenar productos de pedido
