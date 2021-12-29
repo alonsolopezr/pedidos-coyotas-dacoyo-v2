@@ -82,24 +82,106 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //almacena pedido
+        // //almacena pedido
 
-        //validar pedido
-        $validated = $this->validate($request, [
-            "campo" => 'required'
+        // //validar pedido
+        // $validated = $this->validate($request, [
+        //     "campo" => 'required'
 
+        // ]);
+        // //almacenar pedido
+        // $pedido = Pedido::create($validated);
+        // //almacenar productos de pedido
+        // foreach ($request->productos as $key => $value)
+        // {
+        //     # code...
+
+        // }
+
+        // //redirect
+        // return redirect()->route('pedidos.confirmacion', compact('pedido'));
+
+        //------------------------------------------------------------------//
+
+        //hacer el store
+        // Http::post('ruta_api_guardar');
+
+        //validar
+        $this->validate($request, [
+            "fecha" => "required",
+            "hora" => "required",
+        ], [
+            "fecha.required" => "* Debe seleccionar una fecha válida",
+            "hora.required" => "* Por favor, seleccione una hora disponible, a partir de las 2pm.",
         ]);
-        //almacenar pedido
-        $pedido = Pedido::create($validated);
-        //almacenar productos de pedido
-        foreach ($request->productos as $key => $value)
+
+        //se calcula el total de paquetes
+        $this->calculaTotalDePaquetes();
+        //calcular cuantos paquetes puede apartar y si los sobrepasa,
+        //ERROR, devolver  e indicarle que no debe pasar de X paquetes...
+
+        DB::transaction(function ()
         {
-            # code...
+            $numDelDia = $this->numSiguientePedido($this->fecha);
+            $stringQr = Carbon::create($this->fecha)->format('Ymd') . '*' . Carbon::create($this->hora)->format('Hi') . '*' . $this->sucursal . '*' . $numDelDia;
+            //dd($numDelDia);
+            //guardar pedido
+            // dd([
+            //     "folio" => $stringQr,
+            //     "qr" => "000011",
+            //     "status" => 1,
+            //     "paga_en_tienda" => 1,
+            //     "monto_total" => $this->montoTotal,
+            //     "fecha" => $this->fecha,
+            //     "hora" => $this->hora,
+            //     "cancelado" => 0,
+            //     "cliente_id" => Auth::user()->id,
+            //     "sucursal" => $this->sucursal,
+            //     "num_del_dia" => $numDelDia,
+            //     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+            // ]);
+            $pedido = Pedido::create(
+                [
+                    "folio" => $stringQr,
+                    "qr" => "000011",
+                    "status" => 1,
+                    "paga_en_tienda" => 1,
+                    "monto_total" => $this->montoTotal,
+                    "fecha" => $this->fecha,
+                    "hora" => $this->hora,
+                    "cancelado" => 0,
+                    "cliente_id" => Auth::user()->id,
+                    "sucursal" => $this->sucursal,
+                    "num_del_dia" => $numDelDia,
+                    "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+                ]
+            );
 
-        }
+            //guardar productos de pedido
+            foreach ($this->pedido as $key => $articulo)
+            {
+                // dd([
+                //     "pedido_id" => $pedido->id,
+                //     "producto_id" => $articulo['id'],
+                //     "cantidad" => $articulo['cantidad'],
+                // ]);
+                ProductosDePedido::create([
+                    "pedido_id" => $pedido->id,
+                    "producto_id" => $articulo['id'],
+                    "cantidad" => $articulo['cantidad'],
+                ]);
+            }
+            //crer qr
+            $qr = QRCode::text($stringQr)->setOutFile(public_path('storage/images/qrpedidos/qr_pedido' . $pedido->id . '.svg'))->setSize(6)->svg();
+            //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
+            //      ->setMargin(2)
+            //     ->svg();
+            //notificar al admin
+            //notificar al cliente
+            Mail::to(auth()->user()->email)->send(new ConfirmacionPedidoClienteEmail());
+        });
 
-        //redirect
-        return redirect()->route('pedidos.confirmacion', compact('pedido'));
+        return redirect()->route('pedidos.confirmacion_cliente');
     }
     /**
      * Store a newly created resource in storage.
@@ -154,18 +236,19 @@ class PedidoController extends Controller
     {
         //almacena pedido
 
-        dd($request);
+        // dd($request);
         //almacenar pedido
         // $pedido = Pedido::create($validated);
         //almacenar productos de pedido
-        foreach ($request->productos as $key => $value)
-        {
-            # code...
+        // foreach ($request->productos as $key => $value)
+        // {
+        //     # code...
 
-        }
+        // }
 
         //redirect
-        return redirect()->route('pedidos.confirmacion', compact('pedido'));
+        // return redirect()->route('pedidos.confirmacion', compact('pedido'));
+        return view('pedidos.leer-qr-pedido', compact('request'));
     }
 
 

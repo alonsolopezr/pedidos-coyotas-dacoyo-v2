@@ -138,3 +138,12 @@ Route::get('qr-code-calendar', function ()
         ->setMargin(2)
         ->svg();
 });
+
+
+
+//info de PHP para debug
+Route::get('phpInfo', function ()
+{
+    //xdebug_info();
+    dd(php_ini_loaded_file(), php_ini_scanned_files(),);
+});
