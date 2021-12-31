@@ -49,6 +49,7 @@ Route::get('admin_entrega_por_qr', [PedidoController::class, 'entregaPorQR'])->m
 ///////////PRUEBAS DE QR CODE!!!!!///////////////////////////////
 
 Route::view('read_QRCode', 'pedidos.leer-qr-pedido');
+Route::view('WIP_read_QRCode', 'pedidos.leer_qr_pedido_wip');
 //TODO: quitar todos los ejemplos/////////////////////////////////////
 
 Route::get('qr-code/examples/phone', function ()
