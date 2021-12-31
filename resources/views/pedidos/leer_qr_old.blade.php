@@ -7,11 +7,11 @@
 </head>
 <body>
   
-    <h1>Scan del QR de PEDIDO</h1>
+    <h1>JQuery HTML5 QR Code Scanner using Instascan JS Example - ItSolutionStuff.com</h1>
     
-    <video id="preview" playsinline  autoplay></video>
+    <video id="preview"></video>
     <script type="text/javascript">
-      let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), facingMode : 'environment' });
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
       scanner.addListener('scan', function (content) {
         alert(content);
       });
