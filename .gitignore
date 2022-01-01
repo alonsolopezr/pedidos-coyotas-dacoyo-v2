@@ -5,6 +5,8 @@
 /vendor
 .env
 .env.backup
+.editorconfig
+.DS_Store
 .phpunit.result.cache
 .virtualhost.conf
 docker-compose.override.yml
