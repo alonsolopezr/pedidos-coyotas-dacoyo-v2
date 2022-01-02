@@ -24,8 +24,23 @@ class PedidoController extends Controller
         //muestra todos los pedidos
         $pedidos = Pedido::all();
         //dd($pedidos);
-        // return view('pedidos.index', compact('pedidos'));
+        //return view('pedidos.index', compact('pedidos'));
         return response()->json($pedidos, 200);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function index_cliente()
+    {
+        //muestra todos los pedidos
+        $pedidos = auth()->user()->pedidos; //Pedido::all();
+        //dd($pedidos);
+        return view('pedidos.index_cliente', compact('pedidos'));
+        //return response()->json($pedidos, 200);
     }
 
     /**

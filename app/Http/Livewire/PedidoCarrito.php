@@ -262,67 +262,85 @@ class PedidoCarrito extends Component
         //calcular cuantos paquetes puede apartar y si los sobrepasa,
         //ERROR, devolver  e indicarle que no debe pasar de X paquetes...
 
-        DB::transaction(function ()
+        try
         {
-            $numDelDia = $this->numSiguientePedido($this->fecha);
-            $stringQr = Carbon::create($this->fecha)->format('Ymd') . '*' . Carbon::create($this->hora)->format('Hi') . '*' . $this->sucursal . '*' . $numDelDia;
-            //dd($numDelDia);
-            //guardar pedido
-            // dd([
-            //     "folio" => $stringQr,
-            //     "qr" => "000011",
-            //     "status" => 1,
-            //     "paga_en_tienda" => 1,
-            //     "monto_total" => $this->montoTotal,
-            //     "fecha" => $this->fecha,
-            //     "hora" => $this->hora,
-            //     "cancelado" => 0,
-            //     "cliente_id" => Auth::user()->id,
-            //     "sucursal" => $this->sucursal,
-            //     "num_del_dia" => $numDelDia,
-            //     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
-            // ]);
-            $pedido = Pedido::create(
-                [
-                    "folio" => $stringQr,
-                    "qr" => "000011",
-                    "status" => 1,
-                    "paga_en_tienda" => 1,
-                    "monto_total" => $this->montoTotal,
-                    "fecha" => $this->fecha,
-                    "hora" => $this->hora,
-                    "cancelado" => 0,
-                    "cliente_id" => Auth::user()->id,
-                    "sucursal" => $this->sucursal,
-                    "num_del_dia" => $numDelDia,
-                    "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
-                ]
-            );
-
-            //guardar productos de pedido
-            foreach ($this->pedido as $key => $articulo)
+            DB::transaction(function ()
             {
-                // dd([
-                //     "pedido_id" => $pedido->id,
-                //     "producto_id" => $articulo['id'],
-                //     "cantidad" => $articulo['cantidad'],
-                // ]);
-                ProductosDePedido::create([
-                    "pedido_id" => $pedido->id,
-                    "producto_id" => $articulo['id'],
-                    "cantidad" => $articulo['cantidad'],
-                ]);
-            }
-            //crer qr
-            $qr = QRCode::text($stringQr)->setOutFile(public_path('storage/images/qrpedidos/qr_pedido' . $pedido->id . '.svg'))->setSize(6)->svg();
-            //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
-            //      ->setMargin(2)
-            //     ->svg();
-            //notificar al admin
-            //notificar al cliente
-            Mail::to(auth()->user()->email)->send(new ConfirmacionPedidoClienteEmail());
-        });
+                //TODO: hacer pedido numero del dia, PERO POR SUCURSAL
+                $numDelDia = $this->numSiguientePedido($this->fecha);
+                //string del folio
+                $stringQr = Carbon::create($this->fecha)->format('Ymd') . '*' . Carbon::create($this->hora)->format('Hi') . '*' . $this->sucursal . '*' . $numDelDia;
 
+                //dd($numDelDia);
+                //guardar pedido
+                // dd([
+                //     "folio" => $stringQr,
+                //     "qr" => "000011",
+                //     "status" => 1,
+                //     "paga_en_tienda" => 1,
+                //     "monto_total" => $this->montoTotal,
+                //     "fecha" => $this->fecha,
+                //     "hora" => $this->hora,
+                //     "cancelado" => 0,
+                //     "cliente_id" => Auth::user()->id,
+                //     "sucursal" => $this->sucursal,
+                //     "num_del_dia" => $numDelDia,
+                //     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+                // ]);
+                $pedido = Pedido::create(
+                    [
+                        "folio" => $stringQr,
+                        "qr" => "000011",
+                        "status" => 1,
+                        "paga_en_tienda" => 1,
+                        "monto_total" => $this->montoTotal,
+                        "fecha" => $this->fecha,
+                        "hora" => $this->hora,
+                        "cancelado" => 0,
+                        "cliente_id" => Auth::user()->id,
+                        "sucursal" => $this->sucursal,
+                        "num_del_dia" => $numDelDia,
+                        "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+                    ]
+                );
+                //crear qr
+                $qr = QRCode::text($stringQr)->setOutFile(public_path('storage/images/qrpedidos/qr_pedido_' . $pedido->id . '-' . Carbon::create($this->fecha)->format('Ymd') . '--' . Auth::user()->id . '.svg'))->setSize(6)->svg();
+                //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
+                //Actualizar el url del archivo del QR en el registro
+                $pedido->qr = 'storage/images/qrpedidos/qr_pedido_' . $pedido->id . '-' . Carbon::create($this->fecha)->format('Ymd') . '--' . Auth::user()->id . '.svg';
+                $pedido->save();
+
+
+                //guardar productos de pedido
+                foreach ($this->pedido as $key => $articulo)
+                {
+                    // dd([
+                    //     "pedido_id" => $pedido->id,
+                    //     "producto_id" => $articulo['id'],
+                    //     "cantidad" => $articulo['cantidad'],
+                    // ]);
+                    ProductosDePedido::create([
+                        "pedido_id" => $pedido->id,
+                        "producto_id" => $articulo['id'],
+                        "cantidad" => $articulo['cantidad'],
+                    ]);
+                }
+
+                //notificar al admin
+                //notificar al cliente
+                Mail::to(auth()->user()->email)->send(new ConfirmacionPedidoClienteEmail());
+                // dd("Correcto, si llegó hasta acá...");
+            });
+            DB::commit();
+        }
+        catch (\Throwable $e)
+        {
+            # code...
+            DB::rollback();
+            dd("falló la creacion del pedido???", $e);
+        }
+
+        // return redirect()->route('pedidos.confirmacion_cliente');
         return redirect()->route('pedidos.confirmacion_cliente');
     }
 }

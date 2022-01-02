@@ -20,7 +20,10 @@
                                             Su Pedido ha sido registrado. Al pasar por el muestre este Código QR:
                                         </p>
                                         {{-- <img class="inline-block mb-2 align-middle border-4 border-solid border-coyos-lightyellow rounded-2xl " src="{!! QRCode::size(100)->generate(auth()->user()->pedidos()->latest()->first()->id) !!}" alt=""> --}}
-                                        <img class="inline-block mb-6 align-middle border-4 border-solid border-coyos-lightyellow rounded-2xl " src="storage/images/qrpedidos/qr_pedido{{auth()->user()->pedidos()->latest()->first()->id}}.svg" alt="">
+                                        @php
+                                            $fechaCreatedAt=\Carbon\Carbon::create(auth()->user()->pedidos()->latest()->first()->created_at->toDateTimeString())->format('Ymd')
+                                        @endphp
+                                        <img class="inline-block mb-6 align-middle border-4 border-solid border-coyos-lightyellow rounded-2xl " src="{{asset(auth()->user()->pedidos()->latest()->first()->qr)}}" alt="QR del Pedido">
                                     </div>
                                 </div>
 

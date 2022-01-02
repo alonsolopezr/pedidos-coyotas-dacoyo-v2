@@ -16,16 +16,16 @@
         @livewireStyles
 
         <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" ></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-coyos-darkbrown">
             @livewire('navigation-dropdown')
 
             <!-- Page Heading -->
-            <header class="bg-coyos-lightbrown shadow">
+            <header class="shadow bg-coyos-lightbrown">
             {{-- <header class="bg-white shadow"> --}}
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>
