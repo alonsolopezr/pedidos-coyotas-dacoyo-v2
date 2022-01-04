@@ -45,6 +45,11 @@
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                 </div>
+                {{-- <div class="ml-4 text-lg font-semibold leading-7">
+                    <a href="{{route('profile.show')}}" class="text-gray-900 underline dark:text-white">
+                        {{ __('Profile') }}
+                    </a>
+                </div> --}}
             </div>
 
             <!-- Settings Dropdown -->
@@ -52,8 +57,26 @@
                 <x-jet-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                            <button class="flex text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
-                                <img class="object-cover w-8 h-8 rounded-full" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                            <button class="flex text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full align-content-center focus:outline-none focus:border-gray-300">
+                                <div class="flex flex-row items-center ">
+                                    <div class="flex-col items-end">
+                                        <p class="mx-2 text-lg text-blue-800 text-bold">{{ Auth::user()->name }}</p>
+                                        <!-- Authentication -->
+                                        <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+
+                                        <x-jet-dropdown-link href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                                                                                                        this.closest('form').submit();">
+                                            {{ __('Logout') }}
+                                        </x-jet-dropdown-link>
+                                        </form>
+                                    </div>
+
+                                    <img class="object-cover w-8 h-8 rounded-full" src="{{ Auth::user()->profile_photo_url }}"
+                                        alt="{{ Auth::user()->name }}" />
+
+                                </div>
                             </button>
                         @else
                             <button class="flex items-center text-sm font-medium text-gray-800 transition duration-150 ease-in-out hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300">
@@ -74,9 +97,12 @@
                             {{ __('Manage Account') }}
                         </div>
 
-                        <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                        <x-jet-dropdown-link href="{{ url('/user/profile')}}">
                             {{ __('Profile') }}
                         </x-jet-dropdown-link>
+                        {{-- <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                            {{ __('Profile') }}
+                        </x-jet-dropdown-link> --}}
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                             <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
