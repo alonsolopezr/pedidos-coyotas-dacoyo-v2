@@ -64,24 +64,24 @@ class ProductoSeeder extends Seeder
                 'imagen_1' => 'images/productos/coyotas_surtidas.jpg',
                 'precio' => 45.0,
             ],
-            [
-                'nombre' => '1 Coyota de Piloncillo',
-                'descripcion' => 'Una Coyotas rellena de Piloncillo.',
-                'imagen_1' => 'images/productos/coyotas_piloncillo.jpg',
-                'precio' => 9.00,
-            ],
-            [
-                'nombre' => '1 Coyota de Jamoncillo',
-                'descripcion' => 'Una Coyotas rellena de Jamoncillo.',
-                'imagen_1' => 'images/productos/coyotas_jamoncillo.jpg',
-                'precio' => 10.00,
-            ],
-            [
-                'nombre' => '1 Coyota de Jamoncillo con Nuéz',
-                'descripcion' => 'Una Coyotas rellena de Jamoncillo con Nuéz.',
-                'imagen_1' => 'images/productos/coyotas_jam_con_nuez.jpg',
-                'precio' => 11.00,
-            ],
+            // [
+            //     'nombre' => '1 Coyota de Piloncillo',
+            //     'descripcion' => 'Una Coyotas rellena de Piloncillo.',
+            //     'imagen_1' => 'images/productos/coyotas_piloncillo.jpg',
+            //     'precio' => 9.00,
+            // ],
+            // [
+            //     'nombre' => '1 Coyota de Jamoncillo',
+            //     'descripcion' => 'Una Coyotas rellena de Jamoncillo.',
+            //     'imagen_1' => 'images/productos/coyotas_jamoncillo.jpg',
+            //     'precio' => 10.00,
+            // ],
+            // [
+            //     'nombre' => '1 Coyota de Jamoncillo con Nuéz',
+            //     'descripcion' => 'Una Coyotas rellena de Jamoncillo con Nuéz.',
+            //     'imagen_1' => 'images/productos/coyotas_jam_con_nuez.jpg',
+            //     'precio' => 11.00,
+            // ],
         ];
         //
         foreach ($coyotas as $producto)

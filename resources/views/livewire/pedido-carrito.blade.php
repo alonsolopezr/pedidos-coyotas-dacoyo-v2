@@ -65,7 +65,7 @@
                                             ¡Atención! Disminuya cantidades
                                         </span>
                                         <p class="leading-tight text-white ">
-                                            Ya no se pueden agregar más paquetes en este dia, en esta sucursal.
+                                            Ya no se pueden PEDIR más paquetes en este dia, en esta sucursal.
                                         </p>
                                     </div>
                                 </div>
@@ -75,13 +75,13 @@
                             </div>
                             <div class="flex flex-wrap justify-center  min-w-full mt-12  ">
                                 @if ($this->quedanPaquetesDisponiblesParaFecha($fecha, $this->sucursal))
-                                    @foreach ($productos as $producto)
+                                    @foreach ($productos as $idx=>$producto)
                                         <div class="grid mx-auto grid-cols-3 gap-y-4 sm:grid-cols-4 ">
                                             <div class="col-span-1 sm:col-span-1 xl:col-span-1">
                                                 <img
                                                     alt="{{$producto->nombre}}"
                                                     src="{{asset('storage/'.$producto->imagen_1)}}"
-                                                    class="h-24 w-24 rounded  mx-auto" />
+                                                    class="h-20 w-24 rounded  mx-auto my-2 border border-yellow-400 border-double" />
                                             </div>
                                             <div class="flex max-w-full  col-span-1 sm:col-span-2 ">
                                                 <h3 class="w-80 overflow-x-auto pr-5 font-semibold text-black">{{$producto->nombre}}</h3>
@@ -91,8 +91,51 @@
                                             </div>
                                             <div class="col-span-1 sm:col-span-1 md:col-span-1 italic ">
                                                 <div class="flex flex-row  min-w-full">
-                                                    ${{$producto->precio}}
-                                                    <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number" value="0" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}"  size="2" min="0" max="20">
+                                                   <p class="ml-2"> ${{$producto->precio}}</p>
+
+                                                   {{--  wire:model="controlNumericPaquetes[{{$idx}}]" --}}
+                                                    @if ($producto->nombre=="Paquete de 10 Coyotas - Piloncillo")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number"    wire:model="cuantosPaqPiloncillo10" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}"  size="2" min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 5 Coyotas - Piloncillo")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4" wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)" wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"  type="number"    wire:model="cuantosPaqPiloncillo5" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}"  size="2" min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 10 Coyotas - Jamoncillo")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqJamoncillo10" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 5 Coyotas - Jamoncillo")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqJamoncillo5" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 10 Coyotas - Jamoncillo con Nuéz")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqJamoncilloNuez10" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 5 Coyotas - Jamoncillo con Nuéz")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqJamoncilloNuez5" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 10 Coyotas - Surtido")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqSurtido10" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+                                                    @elseif ($producto->nombre=="Paquete de 5 Coyotas - Surtido")
+                                                        <input class="px-6 bg-gray-300 rounded mx-4"
+                                                            wire:change="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            wire:click="agregarACarrito('coyo{{$producto->id}}',document.getElementById('coyo{{$producto->id}}').value)"
+                                                            type="number" wire:model="cuantosPaqSurtido5" name="coyo{{$producto->id}}" id="coyo{{$producto->id}}" size="2"
+                                                            min="0" max="20">
+
+                                                        @endif
                                                 </div>
                                             </div>
                                         </div>

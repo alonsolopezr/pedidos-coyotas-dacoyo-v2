@@ -35,18 +35,27 @@ class PedidoCarrito extends Component
     //sucursal
     public $sucursal = 'VILLA_DE_SERIS';
     public $errorNoPaquetesDisponibles;
-
+    //para control de numerics de paquetes de coyos
+    public $controlNumericPaquetes;
+    public $cuantosPaqPiloncillo10 = 0;
+    public $cuantosPaqJamoncillo10 = 0;
+    public $cuantosPaqJamoncilloNuez10 = 0;
+    public $cuantosPaqPiloncillo5 = 0;
+    public $cuantosPaqJamoncillo5 = 0;
+    public $cuantosPaqJamoncilloNuez5 = 0;
+    public $cuantosPaqSurtido10 = 0;
+    public $cuantosPaqSurtido5 = 0;
 
     public function render()
     {
-        //cargar los productos
-        $this->productos = Producto::all();
+
         //actualizar carrito
         $this->contarArticulos();
         $this->calculaMontoTotal();
         //se determina el dia siguiente para el selector de fecha
         $this->diaSiguiente();
         $this->cargarHorasDisponiblesDelDia($this->fecha, $this->sucursal);
+
         return view('livewire.pedido-carrito');
     }
 
@@ -66,9 +75,17 @@ class PedidoCarrito extends Component
 
     public function mount()
     {
+        //cargar los productos
+        $this->productos = Producto::all();
+
+        //inicializar un "contador" de paquetes de coyotas por cada sabor y presentacion
+        foreach ($this->productos as $key => $prod)
+        {
+            $this->controlNumericPaquetes[] = 0;
+        }
         //despues render????
         //actualizar carrito
-        $this->contarArticulos();
+        //$this->contarArticulos();
     }
 
     public function quedanPaquetesDisponiblesParaFecha($fecha, $sucursal)
@@ -94,6 +111,7 @@ class PedidoCarrito extends Component
 
     public function agregarACarrito($prodId, $cantidad)
     {
+        // dd($this->controlNumericPaquetes);
         //parsear prodId
         $prodId = str_replace("coyo", "", $prodId);
         $prod = $this->obtenerProductoDeArray($prodId);
