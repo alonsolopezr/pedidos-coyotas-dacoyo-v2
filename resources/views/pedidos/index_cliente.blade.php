@@ -71,7 +71,31 @@
                                             </textarea>
                                             <button class="min-h-full text-xl text-center rounded hover:bg-coyos-darkblue -pt-10 hover:text-coyos-lightyellow bg-coyos-lightyellow text-coyos-darkblue text-bold">Enviar</button>
                                         </form> --}}
+
                                     </td>
+                                    <!-- API Token Permissions Modal -->
+                                    {{-- TODO: hacer un modal para mostrar el QR --}}
+                                    <x-jet-dialog-modal wire:model="">
+                                        <x-slot name="title">
+                                            {{ __('API Token Permissions') }}
+                                        </x-slot>
+
+                                        <x-slot name="content">
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                            </div>
+                                        </x-slot>
+
+                                        <x-slot name="footer">
+                                            <x-jet-secondary-button wire:click="" wire:loading.attr="disabled">
+                                                {{ __('Nevermind') }}
+                                            </x-jet-secondary-button>
+
+                                            <x-jet-button class="ml-2" wire:click="" wire:loading.attr="disabled">
+                                                {{ __('Save') }}
+                                            </x-jet-button>
+                                        </x-slot>
+                                    </x-jet-dialog-modal>
                                 @endif
                             </tr>
                         @endforeach

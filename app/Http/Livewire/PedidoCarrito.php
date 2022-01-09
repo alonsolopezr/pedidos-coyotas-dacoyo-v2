@@ -45,7 +45,10 @@ class PedidoCarrito extends Component
     public $cuantosPaqJamoncilloNuez5 = 0;
     public $cuantosPaqSurtido10 = 0;
     public $cuantosPaqSurtido5 = 0;
-
+    //quien pasa por pedido
+    public $yoPasoPorPedido = 1;
+    public $txtNombreQuienPasaPorPedido;
+    public $txtCelularQuienPasaPorPedido;
     public function render()
     {
 

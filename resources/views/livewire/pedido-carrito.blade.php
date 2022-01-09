@@ -70,7 +70,62 @@
                                     </div>
                                 </div>
                             @else
+                            {{-- QUIEN PASA POR EL PEDIDO  --}}
+                            <div class="flex flex-row w-auto bg-coyos-midbrown">
+                                <div class="flex flex-row align-self-center  bg-coyos-lightblue w-auto mb-4">
+                                    <div class=" bg-coyos-darkblue flex-center ">
+                                        <div class="mx-4 my-auto align-middle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-basket" width="24" height="24"
+                                                viewBox="0 0 20 20" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h20v20H0z" fill="none" />
+                                                <polyline points="7 10 12 4 17 10" />
+                                                <path d="M21 10l-2 8a2 2.5 0 0 1 -2 2h-10a2 2.5 0 0 1 -2 -2l-2 -8z" />
+                                                <circle cx="12" cy="15" r="2" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col w-full text-black opacity-75 items-center p-4">
+                                       <div class="flex-row">
+                                           <span class="text-lg font-bold pb-4 text-black ">
+                                                ¿Quien pasará por el pedido?
+                                            </span>
+                                            <hr class=" border-coyos-lightpink border-4">
+                                       </div>
+                                        <div class="flex flex-row">
+                                            <div class="flex flex-col mx-2 my-1">
+                                               <div class="flex-row">
+                                                   {{-- checkbox que diga: Yo paso por mi pedido --}}
+                                                   <input type="checkbox" name="yoPasoPorMiPedido" id="yoPasoPorMiPedido" value="1" class="form-checkbox mx-2" checked
+                                                   wire:model="yoPasoPorPedido">
+                                                   <label for="yoPasoPorMiPedido" class="form-label text-md font-bold text-black">Yo paso por mi pedido</label>
+                                               </div>
+                                            </div>
+                                            @if (!$this->yoPasoPorPedido)
+                                               <div class="flex flex-col mx-2">
+                                                   <div class="flex flex-row my-2">
+                                                        <p class="leading-tight text-black text-md-center">
+                                                            Alguien más pasará por mi pedido.
+                                                        </p>
+                                                    </div>
+                                                    {{-- inputs para indicar nombre de quien pasa por pedido, telefono --}}
+                                                    <label for="nombreQuienPasaPorPedido" class="form-label py-1">Nombre</label>
+                                                    <input type="text" name="nombreQuienPasaPorPedido" id="nombreQuienPasaPorPedido" class="form-input"
+                                                        placeholder="Nombre">
+                                                    <label for="telefonoQuienPasaPorPedido" class="form-label">Teléfono</label>
+                                                    <input type="text" name="telefonoQuienPasaPorPedido" id="telefonoQuienPasaPorPedido" class="form-input"
+                                                        placeholder="Teléfono">
 
+                                                </div>
+                                            @endif
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <hr>
                             @endif
                             </div>
                             <div class="flex flex-wrap justify-center  min-w-full mt-12  ">
