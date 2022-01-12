@@ -74,14 +74,14 @@
 
                                     </td>
                                     <!-- API Token Permissions Modal -->
-                                    {{-- TODO: hacer un modal para mostrar el QR --}}
+                                    {{-- TODO: hacer un modal para mostrar el QRz --}}
                                     <x-jet-dialog-modal wire:model="">
                                         <x-slot name="title">
                                             {{ __('API Token Permissions') }}
                                         </x-slot>
 
                                         <x-slot name="content">
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
                                             </div>
                                         </x-slot>

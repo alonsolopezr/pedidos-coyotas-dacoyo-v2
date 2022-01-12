@@ -30,6 +30,9 @@ class CreatePedidosTable extends Migration
             $table->enum('sucursal', ['VILLA_DE_SERIS', 'OLIVARES'])->default('VILLA_DE_SERIS');
             $table->integer('num_del_dia')->default(1);
             $table->integer('paquetes_de_coyotas');
+            $table->boolean('cliente_pasa_por_pedido')->default(true);
+            $table->string('nombre_otra_persona_pasa_por_pedido')->nullable();
+            $table->string('telefono_otra_persona_pasa_por_pedido')->nullable();
             $table->timestamps();
         });
     }

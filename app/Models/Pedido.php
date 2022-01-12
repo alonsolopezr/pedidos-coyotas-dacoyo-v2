@@ -27,7 +27,9 @@ class Pedido extends Model
         'sucursal',
         'num_del_dia',
         'paquetes_de_coyotas',
-
+        'cliente_pasa_por_pedido',
+        'nombre_otra_persona_pasa_por_pedido',
+        'telefono_otra_persona_pasa_por_pedido',
     ];
 
     public function productosDePedido()

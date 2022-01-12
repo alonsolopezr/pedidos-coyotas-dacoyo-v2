@@ -307,7 +307,12 @@ class PedidoCarrito extends Component
                 //     "sucursal" => $this->sucursal,
                 //     "num_del_dia" => $numDelDia,
                 //     "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+                //     "cliente_pasa_por_pedido" => $this->clientePasaPorPedido,
+                //     "nombre_otra_persona_pasa_por_pedido" =>$this->nombre_otra_persona_pasa_por_pedido,;
+                //     "telefono_otra_persona_pasa_por_pedido" =>$this->nombre_otra_persona_pasa_por_pedido,;
+
                 // ]);
+
                 $pedido = Pedido::create(
                     [
                         "folio" => $stringQr,
@@ -322,8 +327,12 @@ class PedidoCarrito extends Component
                         "sucursal" => $this->sucursal,
                         "num_del_dia" => $numDelDia,
                         "paquetes_de_coyotas" => $this->paquetesDeCoyotas,
+                        "cliente_pasa_por_pedido" => isset($this->yoPasoPorPedido) && $this->yoPasoPorPedido ? 1 : 0,
+                        "nombre_otra_persona_pasa_por_pedido" => $this->txtNombreQuienPasaPorPedido,
+                        "telefono_otra_persona_pasa_por_pedido" => $this->txtCelularQuienPasaPorPedido,
                     ]
                 );
+
                 //crear qr
                 $qr = QRCode::text($stringQr)->setOutFile(public_path('storage/images/qrpedidos/qr_pedido_' . $pedido->id . '-' . Carbon::create($this->fecha)->format('Ymd') . '--' . Auth::user()->id . '.svg'))->setSize(6)->svg();
                 //  return QRCode::text('Pedido#0123# Para:Alonso Lopez Romo. Pasará el: 03/01/2021 a las 14:05 en la Sucursal: Villa de Seris.')->setSize(4)
