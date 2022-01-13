@@ -6,6 +6,7 @@ use App\Models\Pedido;
 use Livewire\Component;
 use App\Models\Producto;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\Models\ProductosDePedido;
 use LaravelQRCode\Facades\QRCode;
 use Illuminate\Support\Facades\DB;
@@ -272,7 +273,8 @@ class PedidoCarrito extends Component
         //validar
         $this->validate([
             "fecha" => "required",
-            "hora" => "required",
+            "hora" => ["required", Rule::notIn(['Elija', 'Select', 'Choose'])],
+            // "hora" => "date_format:H:i"
         ], [
             "fecha.required" => "* Debe seleccionar una fecha válida",
             "hora.required" => "* Por favor, seleccione una hora disponible, a partir de las 2pm.",
