@@ -5,7 +5,7 @@
         </div>
 
             <div class="w-full p-6">
-                <img class="w-full" src="{{ $qr['qr']}}" alt="IMAGEN DE QR">
+                <img class="w-full" src="{{ $qr['qr'] ?? 'NO HAY QR CREADO'}}" alt="IMAGEN DE QR">
             </div>
 
 
