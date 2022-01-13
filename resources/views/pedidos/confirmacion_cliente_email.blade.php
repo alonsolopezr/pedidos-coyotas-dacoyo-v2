@@ -15,7 +15,6 @@
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-coyos-lightbrown overflow-hidden shadow-xl sm:rounded-lg">
 
-                        <!-- This is an example component -->
                             <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-64">
                                 <div class="flex flex-wrap text-center justify-center">
                                     <div class="w-full  px-6">

@@ -109,16 +109,22 @@
                                 .then(gotDevices => {
                                     let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
                                     scanner.addListener('scan', function (content) {
-                                    alert(content);
+                                        // punto donde se identifica QR
+                                        // procesar el content, y parsear
+                                        let tokens = content.split("*");
+                                        console.log("tokens de pedido");
+                                        console.log(tokens);
+
+                                        alert(content);
                                     });
                                     Instascan.Camera.getCameras().then(function (cameras) {
                                     if (cameras.length > 0) {
-                                    scanner.start(cameras[1]);
+                                        scanner.start(cameras[1]);
                                     } else {
-                                    console.error('No cameras found.');
+                                        console.error('No cameras found.');
                                     }
                                     }).catch(function (e) {
-                                    console.error(e);
+                                        console.error(e);
                                     });
                                 })
                                 .catch(error => {
