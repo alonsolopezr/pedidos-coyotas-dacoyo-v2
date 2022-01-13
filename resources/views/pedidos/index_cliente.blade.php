@@ -17,8 +17,8 @@
                             <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 bg-coyos-lightblue border-coyos-darkblue lg:table-cell">¿Qué ordenaste?</td>
                             <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 bg-coyos-lightblue border-coyos-darkblue lg:table-cell">Sucursal</td>
                             <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 bg-coyos-lightblue border-coyos-darkblue lg:table-cell">Status</td>
-                            <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 bg-coyos-lightblue border-coyos-darkblue lg:table-cell">Cancelar</td>
-                            <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 rounded bg-coyos-lightblue border-coyos-lightyellow lg:table-cell">QR y Detalles</td>
+                            {{-- <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 bg-coyos-lightblue border-coyos-darkblue lg:table-cell">Cancelar</td> --}}
+                            <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 rounded bg-coyos-lightblue border-coyos-lightyellow lg:table-cell sm:table-cell">QR y Detalles</td>
                             {{-- <td class="p-3 font-bold text-center text-gray-600 uppercase border-r-4 rounded bg-coyos-lightblue border-coyos-lightyellow lg:table-cell">Notificar</td> --}}
                         </tr>
                     </thead>
@@ -57,45 +57,25 @@
                                         <p class="px-2 py-2 mx-2 text-2xl text-center text-green-700 align-middle text-xl-center text-bold ">Pedido entregado y disfrutado.</p>
                                     </td>
                                 @else
-                                    <td class="px-2 text-center border-r-4 border-solid border-coyos-darkblue">
+                                    {{-- <td class="px-2 text-center border-r-4 border-solid border-coyos-darkblue">
                                         <form action="">
                                             <button class="px-2 py-2 mx-2 text-xl text-center align-middle rounded shadow-outline-indigo hover:bg-coyos-lightblue hover:text-coyos-darkpink bg-coyos-darkpink text-coyos-lightblue text-bold">¿Cancelar?</button>
                                         </form>
-                                    </td>
+                                    </td> --}}
                                     <td class="flex flex-row border-r-4 border-solid border-coyos-darkpink">
+                                        {{-- <button x-data="{}" x-on:click="window.livewire.emitTo('q-r-simple-modal', 'show',  {{ json_encode(["qr" => asset($pedido->qr)]) }})" class="text-indigo-500"> --}}
+                                        <button x-data="{}" x-on:click="window.livewire.emitTo('q-r-simple-modal', 'show', {{ json_encode(["qr" => $pedido->qr]) }})" class="text-indigo-500">
+                                            Mostrar QR
+                                        </button>
                                         {{-- mostrar el qr en etiqueta img con el src --}}
                                         <img src="{{asset($pedido->qr)}}" alt="" class="w-full h-full">
-                                        {{-- <form action="" class="flex flex-row max-h-full">
-                                            <textarea class="rounded bg-cool-gray-300 " name="msg" id="msg" cols="30" rows="5" placeholder="¿quieres comentar algo sobre tu pedido?">
 
-                                            </textarea>
-                                            <button class="min-h-full text-xl text-center rounded hover:bg-coyos-darkblue -pt-10 hover:text-coyos-lightyellow bg-coyos-lightyellow text-coyos-darkblue text-bold">Enviar</button>
-                                        </form> --}}
+
 
                                     </td>
-                                    <!-- API Token Permissions Modal -->
-                                    {{-- TODO: hacer un modal para mostrar el QRz --}}
-                                    <x-jet-dialog-modal wire:model="">
-                                        <x-slot name="title">
-                                            {{ __('API Token Permissions') }}
-                                        </x-slot>
-
-                                        <x-slot name="content">
-                                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-                                            </div>
-                                        </x-slot>
-
-                                        <x-slot name="footer">
-                                            <x-jet-secondary-button wire:click="" wire:loading.attr="disabled">
-                                                {{ __('Nevermind') }}
-                                            </x-jet-secondary-button>
-
-                                            <x-jet-button class="ml-2" wire:click="" wire:loading.attr="disabled">
-                                                {{ __('Save') }}
-                                            </x-jet-button>
-                                        </x-slot>
-                                    </x-jet-dialog-modal>
+                                    {{-- TODO: hacer un modal para mostrar el QRz
+                                    @livewire('q-r-simple-modal', ['codigoqr' => $pedido->qr], key($user->id))--}}
+                                    <livewire:q-r-simple-modal  />
                                 @endif
                             </tr>
                         @endforeach
