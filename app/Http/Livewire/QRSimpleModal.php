@@ -28,8 +28,8 @@ class QRSimpleModal extends Modal
     }
     public function ocultarQR()
     {
-        $this->qr = null;
+        //$this->qr = null;
         $toggle = false;
-        $this->displayValue = "hidden";
+        $this->show = false;
     }
 }

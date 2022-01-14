@@ -1,7 +1,7 @@
 <div>
     <x-modal wire:model="show">
-        <div class="p-6">
-            Mostrar este QR al pasar por su pedido:
+        <div class="p-6 justify-items-stretch">
+            Mostrar este QR al pasar por su pedido: <button class="px-2  hover:text-coyos-darkpink" wire:click="ocultarQR">X</button>
         </div>
 
 
