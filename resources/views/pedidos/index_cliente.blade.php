@@ -75,7 +75,7 @@
                                     </td>
                                     {{-- TODO: hacer un modal para mostrar el QRz
                                     @livewire('q-r-simple-modal', ['codigoqr' => $pedido->qr], key($user->id))--}}
-                                    <livewire:q-r-simple-modal  />
+                                    <livewire:q-r-simple-modal :show="false" />
                                 @endif
                             </tr>
                         @endforeach
